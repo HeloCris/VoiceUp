@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "rootDir": "src",
+    "outDir": "dist",
+    "lib": ["es2019"],
+    "strict": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "types": ["google-apps-script"]
+  },
+  "include": ["src/**/*"]
+}

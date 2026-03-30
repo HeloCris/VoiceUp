@@ -1,0 +1,13 @@
+{
+  "name": "voiceup-workspace-addon",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "push": "npm run build && clasp push"
+  },
+  "devDependencies": {
+    "@types/google-apps-script": "^1.0.63",
+    "typescript": "^5.4.0"
+  }
+}
