@@ -1,0 +1,2 @@
+GOOGLE_APPLICATION_CREDENTIALS=C:\Users\momo\OneDrive - mail.uft.edu.br\Documentos\js-js-js\voiceup-recordings-4accc5cf33df.json
+STORAGE_BUCKET=voiceup-recordings-audio
