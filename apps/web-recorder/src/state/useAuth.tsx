@@ -1,6 +1,24 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { onAuthStateChanged, signInWithPopup, signOut, type User } from 'firebase/auth';
-import { auth, googleProvider, getAuthToken } from '../firebase';
+import { auth, googleProvider, getAuthToken, localAuthBypass } from '../firebase';
+const localRole = (import.meta.env.VITE_LOCAL_ROLE as UserRole | undefined) ?? 'teacher';
+const localUserEmail = import.meta.env.VITE_LOCAL_USER_EMAIL ?? 'local@voiceup.dev';
+
+const normalizeEmail = (value: string) => {
+  const trimmed = value.trim().toLowerCase();
+  const [local, domain] = trimmed.split('@');
+  if (!local || !domain) return trimmed;
+  const normalizedDomain = domain === 'googlemail.com' ? 'gmail.com' : domain;
+  const localPart = normalizedDomain === 'gmail.com'
+    ? local.split('+')[0].replace(/\./g, '')
+    : local.split('+')[0];
+  return `${localPart}@${normalizedDomain}`;
+};
+
+const localSuperadminEmails = (String(import.meta.env.VITE_SUPERADMIN_EMAIL ?? localUserEmail))
+  .split(/[,;]+/)
+  .map((value: string) => normalizeEmail(value))
+  .filter(Boolean);
 
 type UserRole = 'student' | 'teacher';
 
@@ -10,6 +28,14 @@ interface AuthContextValue {
   error: string | null;
   role: UserRole | null;
   roleLoading: boolean;
+  isSuperadmin: boolean;
+  accessDenied: boolean;
+  localOverrideRole: UserRole | null;
+  localOverrideEmail: string | null;
+  localOverrideIsSuperadmin: boolean | null;
+  setLocalOverrideRole: (role: UserRole | null) => void;
+  setLocalOverrideEmail: (email: string | null) => void;
+  setLocalOverrideIsSuperadmin: (value: boolean | null) => void;
   signIn: () => Promise<void>;
   signOutUser: () => Promise<void>;
 }
@@ -22,8 +48,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const [role, setRole] = useState<UserRole | null>(null);
   const [roleLoading, setRoleLoading] = useState(false);
+  const [isSuperadmin, setIsSuperadmin] = useState(false);
+  const [accessDenied, setAccessDenied] = useState(false);
+  const [localSignedOut, setLocalSignedOut] = useState(false);
+  const [localOverrideRole, setLocalOverrideRole] = useState<UserRole | null>(null);
+  const [localOverrideEmail, setLocalOverrideEmail] = useState<string | null>(null);
+  const [localOverrideIsSuperadmin, setLocalOverrideIsSuperadmin] = useState<boolean | null>(null);
 
   useEffect(() => {
+    if (localAuthBypass) {
+      if (localSignedOut) {
+        setUser(null);
+        setLoading(false);
+        setError(null);
+        setIsSuperadmin(false);
+        setAccessDenied(false);
+        return;
+      }
+      const overrideEmail = localOverrideEmail ?? localUserEmail;
+      const localUser = {
+        uid: 'local-user',
+        email: overrideEmail,
+      } as User;
+      setUser(localUser);
+      setLoading(false);
+      setError(null);
+      setIsSuperadmin(false);
+      setAccessDenied(false);
+      return;
+    }
+    if (!auth) {
+      setUser(null);
+      setLoading(false);
+      setError('Firebase auth nao configurado.');
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, (nextUser) => {
       setUser(nextUser);
       setLoading(false);
@@ -33,30 +92,118 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    if (!localAuthBypass) return;
+    if (typeof window === 'undefined') return;
+    const email = localOverrideEmail ?? localUserEmail;
+    const role = localOverrideRole ?? localRole;
+    window.localStorage.setItem('voiceup_local_email', email);
+    window.localStorage.setItem('voiceup_local_role', role);
+  }, [localOverrideEmail, localOverrideRole]);
+
+  useEffect(() => {
     const loadRole = async () => {
+      if (localAuthBypass) {
+        if (localSignedOut) {
+          setRole(null);
+          setRoleLoading(false);
+          setIsSuperadmin(false);
+          setAccessDenied(false);
+          return;
+        }
+        setRoleLoading(true);
+        const localEmail = localOverrideEmail ?? localUserEmail;
+        const headers: Record<string, string> = {
+          'x-local-user-email': localEmail,
+        };
+        if (localOverrideRole) {
+          headers['x-local-role'] = localOverrideRole;
+        }
+
+        try {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/me`, {
+            headers,
+          });
+          if (response.status === 403) {
+            setRole(null);
+            setIsSuperadmin(false);
+            setAccessDenied(true);
+            return;
+          }
+          if (!response.ok) {
+            throw new Error(`Failed to load local profile: ${response.status}`);
+          }
+          const data = (await response.json()) as {
+            role?: UserRole;
+            isSuperadmin?: boolean;
+            active?: boolean;
+          };
+          setRole(data.role ?? 'student');
+          setIsSuperadmin(Boolean(data.isSuperadmin));
+          setAccessDenied(data.active === false);
+        } catch (err) {
+          const role = localOverrideRole ?? localRole;
+          setRole(role);
+          setIsSuperadmin(role !== 'student' && (localOverrideIsSuperadmin ?? false));
+          setAccessDenied(false);
+        } finally {
+          setRoleLoading(false);
+        }
+        return;
+      }
       if (!user) {
         setRole(null);
         setRoleLoading(false);
+        setIsSuperadmin(false);
+        setAccessDenied(false);
         return;
       }
       setRoleLoading(true);
       try {
-        const token = await getAuthToken();
+        let token = await getAuthToken(true);
         if (!token) {
           setRole(null);
+          setIsSuperadmin(false);
+          setAccessDenied(false);
           return;
         }
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/me`, {
+        let response = await fetch(`${import.meta.env.VITE_API_URL}/v1/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        if (response.status === 401) {
+          token = await getAuthToken(true);
+          response = await fetch(`${import.meta.env.VITE_API_URL}/v1/me`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        }
         if (!response.ok) {
+          const text = await response.text();
+          console.error('AUTH /v1/me failed', response.status, text);
+        }
+        if (response.status === 403) {
           setRole(null);
+          setIsSuperadmin(false);
+          setAccessDenied(true);
           return;
         }
-        const data = (await response.json()) as { role?: UserRole };
+        if (!response.ok) {
+          setRole(null);
+          setIsSuperadmin(false);
+          setAccessDenied(false);
+          return;
+        }
+        const data = (await response.json()) as {
+          role?: UserRole;
+          isSuperadmin?: boolean;
+          active?: boolean;
+        };
+        console.log('AUTH /v1/me success', { email: user?.email, ...data });
         setRole(data.role ?? null);
+        setIsSuperadmin(Boolean(data.isSuperadmin));
+        setAccessDenied(data.active === false);
       } catch (err) {
         setRole(null);
+        setIsSuperadmin(false);
+        setAccessDenied(false);
       } finally {
         setRoleLoading(false);
       }
@@ -72,20 +219,90 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       error,
       role,
       roleLoading,
+      isSuperadmin,
+      accessDenied,
+      localOverrideRole,
+      localOverrideEmail,
+      localOverrideIsSuperadmin,
+      setLocalOverrideRole,
+      setLocalOverrideEmail,
+      setLocalOverrideIsSuperadmin,
       signIn: async () => {
+        if (localAuthBypass) {
+          setLocalSignedOut(false);
+          const overrideEmail = localOverrideEmail ?? localUserEmail;
+          const localUser = {
+            uid: 'local-user',
+            email: overrideEmail,
+          } as User;
+          setUser(localUser);
+          const role = localOverrideRole ?? localRole;
+          setRole(role);
+          const isLocalSuperadmin =
+            role !== 'student' &&
+            (localOverrideIsSuperadmin ?? localSuperadminEmails.includes(overrideEmail.toLowerCase()));
+          setIsSuperadmin(isLocalSuperadmin);
+          setAccessDenied(false);
+          return;
+        }
         try {
           setError(null);
+          if (!auth) {
+            throw new Error('Firebase auth nao configurado.');
+          }
+          if (auth.currentUser) {
+            await signOut(auth);
+          }
+          googleProvider.setCustomParameters({ prompt: 'select_account', login_hint: '' });
           await signInWithPopup(auth, googleProvider);
+          const currentUser = auth.currentUser;
+          if (currentUser) {
+            await currentUser.getIdToken(true);
+          }
         } catch (err) {
           const message = err instanceof Error ? err.message : 'Falha ao entrar com Google.';
           setError(message);
         }
       },
       signOutUser: async () => {
-        await signOut(auth);
+        if (localAuthBypass) {
+          setLocalSignedOut(true);
+          setUser(null);
+          setRole(null);
+          setIsSuperadmin(false);
+          setAccessDenied(false);
+          return;
+        }
+        try {
+          if (auth) {
+            await signOut(auth);
+          }
+        } catch (err) {
+          console.error('Failed to sign out', err);
+        } finally {
+          setUser(null);
+          setRole(null);
+          setIsSuperadmin(false);
+          setAccessDenied(false);
+          if (typeof window !== 'undefined') {
+            window.location.reload();
+          }
+        }
       },
     }),
-    [user, loading, error, role, roleLoading]
+    [
+      user,
+      loading,
+      error,
+      role,
+      roleLoading,
+      isSuperadmin,
+      accessDenied,
+      localOverrideRole,
+      localOverrideEmail,
+      localOverrideIsSuperadmin,
+      localSignedOut,
+    ]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

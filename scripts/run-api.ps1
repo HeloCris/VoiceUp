@@ -1,11 +1,12 @@
-Set-Location "C:\Users\momo\OneDrive - mail.uft.edu.br\Documentos\VoiceUp\services\api"
+Set-Location "C:\Users\crist_fja0mc1\OneDrive\Documentos\VoiceUp\services\api"
 
-$env:GOOGLE_APPLICATION_CREDENTIALS="C:\Users\momo\OneDrive - mail.uft.edu.br\Documentos\js-js-js\voiceup-recordings-7ebd7-2a5731fceca9.json"
+$env:GOOGLE_APPLICATION_CREDENTIALS="C:\Users\crist_fja0mc1\OneDrive\Documentos\js-ch4v3\voiceup-recordings-7ebd7-2ed98b085d80.json"
 $env:GCP_PROJECT_ID="voiceup-recordings-7ebd7"
 $env:STORAGE_BUCKET="voiceup-recordings-7ebd7"
-$env:WORKER_URL="http://127.0.0.1:8082/tasks"
-$env:PORT="8083"
-$env:TEACHER_EMAILS="oliveiraquirino@gmail.com,cristinehelorrayne@gmail.com"
+$env:WORKER_URL="http://127.0.0.1:8081/tasks"
+$env:API_BASE_URL="http://localhost:8080"
+$env:PORT="8080"
+$env:SUPERADMIN_EMAIL="cristinehelorrayne@gmail.com"
 
 npm install
 npm run dev

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { RecorderStatus } from '../components/RecorderControls';
-import { getAuthToken } from '../firebase';
+import { getAuthHeaders } from '../firebase';
 
 interface RecorderAPI {
   isSupported: boolean;
@@ -19,6 +19,7 @@ export type UploadResult = {
   transcript: string | null;
   feedback: {
     metrics: {
+      wordCount?: number;
       wordsPerMinute: number;
       pauseCount: number;
       lexicalDiversity: number;
@@ -27,6 +28,22 @@ export type UploadResult = {
       lowConfidenceWords: string[];
       focusSounds?: string[];
     };
+  } | null;
+  aiFeedback: {
+    text: string;
+    comprehensible: boolean;
+    suggestions: {
+      clarity: string;
+      rhythm: string;
+      organization: string;
+    };
+    details: {
+      wordsPerMinute: number;
+      pauseCount: number;
+      makesSense: boolean;
+      language: 'en-US';
+    };
+    generatedAt: string;
   } | null;
 };
 
@@ -118,13 +135,13 @@ export default function useRecorder(): RecorderAPI {
     if (!audioUrl) return null;
     const response = await fetch(audioUrl);
     const blob = await response.blob();
-    const authToken = await getAuthToken();
+    const authHeaders = await getAuthHeaders();
 
     const createAttemptResponse = await fetch(`${API_URL}/v1/attempts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...(authToken && { Authorization: `Bearer ${authToken}` }),
+        ...authHeaders,
       },
       body: JSON.stringify({
         missionId: missionId ?? 'local-mission',
@@ -145,7 +162,10 @@ export default function useRecorder(): RecorderAPI {
 
     const uploadResponse = await fetch(createData.uploadUrl, {
       method: 'PUT',
-      headers: { 'Content-Type': createData.contentType ?? 'audio/webm' },
+      headers: {
+        'Content-Type': createData.contentType ?? 'audio/webm',
+        ...authHeaders,
+      },
       body: blob,
     });
     if (!uploadResponse.ok) {
@@ -157,7 +177,7 @@ export default function useRecorder(): RecorderAPI {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...(authToken && { Authorization: `Bearer ${authToken}` }),
+        ...authHeaders,
       },
       body: JSON.stringify({ languageCode: 'en-US' }),
     });
@@ -167,23 +187,38 @@ export default function useRecorder(): RecorderAPI {
     }
 
     let attempts = 0;
-    while (attempts < 10) {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+    while (attempts < 20) {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       const statusResponse = await fetch(`${API_URL}/v1/attempts/${createData.attemptId}`, {
-        headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+        headers: authHeaders,
       });
       if (!statusResponse.ok) {
         attempts += 1;
         continue;
       }
       const statusData = (await statusResponse.json()) as UploadResult;
-      if (statusData.status === 'completed') {
+      if (statusData.status === 'completed' || statusData.status === 'ready') {
         return statusData;
+      }
+      if (statusData.status === 'queued') {
+        return {
+          attemptId: createData.attemptId,
+          status: 'queued',
+          transcript: null,
+          feedback: null,
+          aiFeedback: null,
+        };
       }
       attempts += 1;
     }
 
-    throw new Error('Processamento em andamento. Tente novamente em instantes.');
+    return {
+      attemptId: createData.attemptId,
+      status: 'queued',
+      transcript: null,
+      feedback: null,
+      aiFeedback: null,
+    };
   }, [audioUrl]);
 
   return {
