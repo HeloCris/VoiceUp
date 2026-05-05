@@ -1,0 +1,385 @@
+{
+  "localMissions": [
+    {
+      "missionId": "local-mission-1",
+      "title": "Missao de teste",
+      "description": "Missao local para validar a tela de missoes.",
+      "prompts": [
+        "Descreva sua rotina usando 2 ou 3 frases."
+      ],
+      "classId": null,
+      "createdAt": "2026-04-30T02:27:39.655Z"
+    }
+  ],
+  "localAttempts": [
+    {
+      "attemptId": "att_1777520991798",
+      "missionId": "mission_1777518840847",
+      "userId": "kF1cOxLJTIOQKs9DouU0KLNqWo42",
+      "userEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "classId": "class_1777518778153",
+      "courseworkId": null,
+      "submissionId": null,
+      "duration": 46,
+      "status": "ready",
+      "studentConfirmed": false,
+      "storageUri": "local://att_1777520991798",
+      "audioUrl": "http://localhost:8080/v1/local-audio/att_1777520991798",
+      "createdAt": "2026-04-30T03:49:51.798Z",
+      "updatedAt": "2026-04-30T03:49:54.054Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\.local-audio\\att_1777520991798.webm",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Nenhuma fala detectada. Grave sua resposta para receber feedback.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Nenhuma fala foi ouvida. Fale algo para que possamos avaliar.",
+          "rhythm": "Gravar o áudio é necessário para avaliar o ritmo.",
+          "organization": "Tente falar algumas frases para receber orientação de organização."
+        },
+        "details": {
+          "wordsPerMinute": 0,
+          "pauseCount": 0,
+          "makesSense": false,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-04-30T03:49:54.054Z"
+      }
+    },
+    {
+      "attemptId": "att_1777518887770",
+      "missionId": "mission_1777518840847",
+      "userId": "kF1cOxLJTIOQKs9DouU0KLNqWo42",
+      "userEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "classId": "class_1777518778153",
+      "courseworkId": null,
+      "submissionId": null,
+      "duration": 45,
+      "status": "ready",
+      "studentConfirmed": false,
+      "storageUri": "local://att_1777518887770",
+      "audioUrl": "http://localhost:8080/v1/local-audio/att_1777518887770",
+      "createdAt": "2026-04-30T03:14:47.770Z",
+      "updatedAt": "2026-04-30T03:14:48.801Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\.local-audio\\att_1777518887770.webm",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Nenhuma fala detectada. Grave sua resposta para receber feedback.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Nenhuma fala foi ouvida. Fale algo para que possamos avaliar.",
+          "rhythm": "Gravar o áudio é necessário para avaliar o ritmo.",
+          "organization": "Tente falar algumas frases para receber orientação de organização."
+        },
+        "details": {
+          "wordsPerMinute": 0,
+          "pauseCount": 0,
+          "makesSense": false,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-04-30T03:14:48.801Z"
+      }
+    },
+    {
+      "attemptId": "att_1777518706937",
+      "missionId": "mission_1777518364181",
+      "userId": "kF1cOxLJTIOQKs9DouU0KLNqWo42",
+      "userEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "classId": "class_1777518331097",
+      "courseworkId": null,
+      "submissionId": null,
+      "duration": 69,
+      "status": "ready",
+      "studentConfirmed": false,
+      "storageUri": "local://att_1777518706937",
+      "audioUrl": "http://localhost:8080/v1/local-audio/att_1777518706937",
+      "createdAt": "2026-04-30T03:11:46.937Z",
+      "updatedAt": "2026-04-30T03:11:48.584Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\.local-audio\\att_1777518706937.webm",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Nenhuma fala detectada. Grave sua resposta para receber feedback.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Nenhuma fala foi ouvida. Fale algo para que possamos avaliar.",
+          "rhythm": "Gravar o áudio é necessário para avaliar o ritmo.",
+          "organization": "Tente falar algumas frases para receber orientação de organização."
+        },
+        "details": {
+          "wordsPerMinute": 0,
+          "pauseCount": 0,
+          "makesSense": false,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-04-30T03:11:48.585Z"
+      }
+    },
+    {
+      "attemptId": "att_1777518428967",
+      "missionId": "mission_1777518364181",
+      "userId": "kF1cOxLJTIOQKs9DouU0KLNqWo42",
+      "userEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "classId": "class_1777518331097",
+      "courseworkId": null,
+      "submissionId": null,
+      "duration": 73,
+      "status": "ready",
+      "studentConfirmed": false,
+      "storageUri": "local://att_1777518428967",
+      "audioUrl": "http://localhost:8080/v1/local-audio/att_1777518428967",
+      "createdAt": "2026-04-30T03:07:08.967Z",
+      "updatedAt": "2026-04-30T03:07:10.131Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\.local-audio\\att_1777518428967.webm",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Nenhuma fala detectada. Grave sua resposta para receber feedback.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Nenhuma fala foi ouvida. Fale algo para que possamos avaliar.",
+          "rhythm": "Gravar o áudio é necessário para avaliar o ritmo.",
+          "organization": "Tente falar algumas frases para receber orientação de organização."
+        },
+        "details": {
+          "wordsPerMinute": 0,
+          "pauseCount": 0,
+          "makesSense": false,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-04-30T03:07:10.131Z"
+      }
+    },
+    {
+      "attemptId": "att_1777518253697",
+      "missionId": "mission_1777516204151",
+      "userId": "kF1cOxLJTIOQKs9DouU0KLNqWo42",
+      "userEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "classId": "class_1777516173493",
+      "courseworkId": null,
+      "submissionId": null,
+      "duration": 81,
+      "status": "ready",
+      "studentConfirmed": false,
+      "storageUri": "local://att_1777518253697",
+      "audioUrl": "http://localhost:8080/v1/local-audio/att_1777518253697",
+      "createdAt": "2026-04-30T03:04:13.697Z",
+      "updatedAt": "2026-04-30T03:04:15.565Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\.local-audio\\att_1777518253697.webm",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Nenhuma fala detectada. Grave sua resposta para receber feedback.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Nenhuma fala foi ouvida. Fale algo para que possamos avaliar.",
+          "rhythm": "Gravar o áudio é necessário para avaliar o ritmo.",
+          "organization": "Tente falar algumas frases para receber orientação de organização."
+        },
+        "details": {
+          "wordsPerMinute": 0,
+          "pauseCount": 0,
+          "makesSense": false,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-04-30T03:04:15.565Z"
+      }
+    },
+    {
+      "attemptId": "att_1777517296065",
+      "missionId": "mission_1777516204151",
+      "userId": "kF1cOxLJTIOQKs9DouU0KLNqWo42",
+      "userEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "classId": "class_1777516173493",
+      "courseworkId": null,
+      "submissionId": null,
+      "duration": 84,
+      "status": "ready",
+      "studentConfirmed": false,
+      "storageUri": "local://att_1777517296065",
+      "audioUrl": "http://localhost:8080/v1/local-audio/att_1777517296065",
+      "createdAt": "2026-04-30T02:48:16.065Z",
+      "updatedAt": "2026-04-30T02:48:17.549Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\.local-audio\\att_1777517296065.webm",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Nenhuma fala detectada. Grave sua resposta para receber feedback.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Nenhuma fala foi ouvida. Fale algo para que possamos avaliar.",
+          "rhythm": "Gravar o áudio é necessário para avaliar o ritmo.",
+          "organization": "Tente falar algumas frases para receber orientação de organização."
+        },
+        "details": {
+          "wordsPerMinute": 0,
+          "pauseCount": 0,
+          "makesSense": false,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-04-30T02:48:17.549Z"
+      }
+    },
+    {
+      "attemptId": "att_1777517009779",
+      "missionId": "mission_1777516204151",
+      "userId": "kF1cOxLJTIOQKs9DouU0KLNqWo42",
+      "userEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "classId": "class_1777516173493",
+      "courseworkId": null,
+      "submissionId": null,
+      "duration": 57,
+      "status": "ready",
+      "studentConfirmed": false,
+      "storageUri": "local://att_1777517009779",
+      "audioUrl": "http://localhost:8080/v1/local-audio/att_1777517009779",
+      "createdAt": "2026-04-30T02:43:29.779Z",
+      "updatedAt": "2026-04-30T02:43:31.855Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\.local-audio\\att_1777517009779.webm",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Nenhuma fala detectada. Grave sua resposta para receber feedback.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Nenhuma fala foi ouvida. Fale algo para que possamos avaliar.",
+          "rhythm": "Gravar o áudio é necessário para avaliar o ritmo.",
+          "organization": "Tente falar algumas frases para receber orientação de organização."
+        },
+        "details": {
+          "wordsPerMinute": 0,
+          "pauseCount": 0,
+          "makesSense": false,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-04-30T02:43:31.855Z"
+      }
+    },
+    {
+      "attemptId": "att_1777516797169",
+      "missionId": "mission_1777516204151",
+      "userId": "kF1cOxLJTIOQKs9DouU0KLNqWo42",
+      "userEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "classId": "class_1777516173493",
+      "courseworkId": null,
+      "submissionId": null,
+      "duration": 65,
+      "status": "ready",
+      "studentConfirmed": false,
+      "storageUri": "local://att_1777516797169",
+      "audioUrl": "http://localhost:8080/v1/local-audio/att_1777516797169",
+      "createdAt": "2026-04-30T02:39:57.169Z",
+      "updatedAt": "2026-04-30T02:39:59.134Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\.local-audio\\att_1777516797169.webm",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Nenhuma fala detectada. Grave sua resposta para receber feedback.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Nenhuma fala foi ouvida. Fale algo para que possamos avaliar.",
+          "rhythm": "Gravar o áudio é necessário para avaliar o ritmo.",
+          "organization": "Tente falar algumas frases para receber orientação de organização."
+        },
+        "details": {
+          "wordsPerMinute": 0,
+          "pauseCount": 0,
+          "makesSense": false,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-04-30T02:39:59.134Z"
+      }
+    },
+    {
+      "attemptId": "att_1777516629058",
+      "missionId": "mission_1777516204151",
+      "userId": "kF1cOxLJTIOQKs9DouU0KLNqWo42",
+      "userEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "classId": "class_1777516173493",
+      "courseworkId": null,
+      "submissionId": null,
+      "duration": 69,
+      "status": "ready",
+      "studentConfirmed": false,
+      "storageUri": "local://att_1777516629058",
+      "audioUrl": "http://localhost:8080/v1/local-audio/att_1777516629058",
+      "createdAt": "2026-04-30T02:37:09.058Z",
+      "updatedAt": "2026-04-30T02:37:10.928Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\.local-audio\\att_1777516629058.webm",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Nenhuma fala detectada. Grave sua resposta para receber feedback.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Nenhuma fala foi ouvida. Fale algo para que possamos avaliar.",
+          "rhythm": "Gravar o áudio é necessário para avaliar o ritmo.",
+          "organization": "Tente falar algumas frases para receber orientação de organização."
+        },
+        "details": {
+          "wordsPerMinute": 0,
+          "pauseCount": 0,
+          "makesSense": false,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-04-30T02:37:10.928Z"
+      }
+    },
+    {
+      "attemptId": "att_1777516498527",
+      "missionId": "mission_1777516204151",
+      "userId": "kF1cOxLJTIOQKs9DouU0KLNqWo42",
+      "userEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "classId": "class_1777516173493",
+      "courseworkId": null,
+      "submissionId": null,
+      "duration": 60,
+      "status": "created",
+      "studentConfirmed": false,
+      "storageUri": "local://att_1777516498527",
+      "audioUrl": "http://localhost:8080/v1/local-audio/att_1777516498527",
+      "createdAt": "2026-04-30T02:34:58.527Z",
+      "updatedAt": "2026-04-30T02:34:59.722Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\.local-audio\\att_1777516498527.webm"
+    },
+    {
+      "attemptId": "att_1777516242283",
+      "missionId": "mission_1777516204151",
+      "userId": "kF1cOxLJTIOQKs9DouU0KLNqWo42",
+      "userEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "classId": "class_1777516173493",
+      "courseworkId": null,
+      "submissionId": null,
+      "duration": 77,
+      "status": "created",
+      "studentConfirmed": false,
+      "storageUri": "local://att_1777516242283",
+      "audioUrl": "http://localhost:8080/v1/local-audio/att_1777516242283",
+      "createdAt": "2026-04-30T02:30:42.283Z",
+      "updatedAt": "2026-04-30T02:30:44.300Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\.local-audio\\att_1777516242283.webm"
+    }
+  ],
+  "localAccessUsers": [
+    {
+      "email": "cristine.helorrayne@uft.edu.br",
+      "name": "Cristine ",
+      "role": "student",
+      "school": "uft",
+      "classroom": "9",
+      "active": true,
+      "updatedAt": "2026-04-30T02:29:14.099Z",
+      "createdAt": "2026-04-30T02:29:14.099Z"
+    },
+    {
+      "email": "cristinehelorrayne@gmail.com",
+      "name": "Superadmin",
+      "role": "teacher",
+      "active": true,
+      "createdAt": "2026-04-30T02:27:39.664Z"
+    }
+  ],
+  "localClasses": []
+}

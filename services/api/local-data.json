@@ -1,0 +1,517 @@
+{
+  "localMissions": [
+    {
+      "missionId": "mission_1777897614182_1580",
+      "title": "Teste rapido",
+      "description": "Descricao de teste",
+      "prompts": [
+        "Leia uma frase",
+        "Repita outra frase"
+      ],
+      "classId": null,
+      "createdAt": "2026-05-04T12:26:54.182Z",
+      "updatedAt": "2026-05-04T12:28:56.118Z",
+      "teacherEmail": "cristinehelorrayne@gmail.com"
+    },
+    {
+      "missionId": "mission_1777898061711_1682",
+      "title": "basic",
+      "description": "hello",
+      "prompts": [
+        "how are u?"
+      ],
+      "classId": "class_1777897748345_5190",
+      "createdAt": "2026-05-04T12:34:21.711Z",
+      "updatedAt": "2026-05-04T12:34:21.711Z",
+      "teacherEmail": "cristinehelorrayne@gmail.com"
+    },
+    {
+      "missionId": "mission_1777928512733_9167",
+      "title": "basico",
+      "description": "diga seu nome",
+      "prompts": [
+        "hello ?"
+      ],
+      "classId": "class_1777928416640_560",
+      "createdAt": "2026-05-04T21:01:52.733Z",
+      "updatedAt": "2026-05-04T21:01:52.733Z",
+      "teacherEmail": "cristinehelorrayne@gmail.com"
+    }
+  ],
+  "localAttempts": [
+    {
+      "id": "attempt_1777912874643_9009",
+      "attemptId": "attempt_1777912874643_9009",
+      "missionId": "mission_1777898061711_1682",
+      "classId": "class_1777897748345_5190",
+      "studentEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "duration": 39,
+      "status": "recording",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": null,
+      "createdAt": "2026-05-04T16:41:14.643Z",
+      "updatedAt": "2026-05-04T16:41:14.643Z"
+    },
+    {
+      "id": "attempt_1777913127783_7641",
+      "attemptId": "attempt_1777913127783_7641",
+      "missionId": "mission_1777897614182_1580",
+      "studentEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "duration": 36,
+      "status": "completed",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": null,
+      "createdAt": "2026-05-04T16:45:27.783Z",
+      "updatedAt": "2026-05-04T16:45:27.898Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\local-audio\\attempt_1777913127783_7641.webm",
+      "audioUrl": "http://localhost:8080/v1/local-audio/attempt_1777913127783_7641"
+    },
+    {
+      "id": "attempt_1777914167436_7734",
+      "attemptId": "attempt_1777914167436_7734",
+      "missionId": "mission_1777897614182_1580",
+      "studentEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "duration": 26,
+      "status": "completed",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Sua pronuncia estava clara e fluida. Continue praticando para melhorar ainda mais!",
+        "comprehensible": true,
+        "suggestions": {
+          "clarity": "Continue articulando bem as palavras.",
+          "rhythm": "Mantenha um ritmo natural na fala.",
+          "organization": "Suas ideias foram bem organizadas."
+        },
+        "details": {
+          "wordsPerMinute": 145,
+          "pauseCount": 3,
+          "makesSense": true,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-05-04T17:02:47.526Z"
+      },
+      "createdAt": "2026-05-04T17:02:47.436Z",
+      "updatedAt": "2026-05-04T17:02:47.527Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\local-audio\\attempt_1777914167436_7734.webm",
+      "audioUrl": "http://localhost:8080/v1/local-audio/attempt_1777914167436_7734"
+    },
+    {
+      "id": "attempt_1777914252081_1792",
+      "attemptId": "attempt_1777914252081_1792",
+      "missionId": "mission_1777897614182_1580",
+      "studentEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "duration": 49,
+      "status": "completed",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Sua pronuncia estava clara e fluida. Continue praticando para melhorar ainda mais!",
+        "comprehensible": true,
+        "suggestions": {
+          "clarity": "Continue articulando bem as palavras.",
+          "rhythm": "Mantenha um ritmo natural na fala.",
+          "organization": "Suas ideias foram bem organizadas."
+        },
+        "details": {
+          "wordsPerMinute": 145,
+          "pauseCount": 3,
+          "makesSense": true,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-05-04T17:04:12.184Z"
+      },
+      "createdAt": "2026-05-04T17:04:12.081Z",
+      "updatedAt": "2026-05-04T17:04:12.184Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\local-audio\\attempt_1777914252081_1792.webm",
+      "audioUrl": "http://localhost:8080/v1/local-audio/attempt_1777914252081_1792"
+    },
+    {
+      "id": "attempt_1777914637594_6596",
+      "attemptId": "attempt_1777914637594_6596",
+      "missionId": "mission_1777898061711_1682",
+      "classId": "class_1777897748345_5190",
+      "studentEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "duration": 44,
+      "status": "completed",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Sua pronuncia estava clara e fluida. Continue praticando para melhorar ainda mais!",
+        "comprehensible": true,
+        "suggestions": {
+          "clarity": "Continue articulando bem as palavras.",
+          "rhythm": "Mantenha um ritmo natural na fala.",
+          "organization": "Suas ideias foram bem organizadas."
+        },
+        "details": {
+          "wordsPerMinute": 145,
+          "pauseCount": 3,
+          "makesSense": true,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-05-04T17:10:37.700Z"
+      },
+      "createdAt": "2026-05-04T17:10:37.594Z",
+      "updatedAt": "2026-05-04T17:10:37.700Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\local-audio\\attempt_1777914637594_6596.webm",
+      "audioUrl": "http://localhost:8080/v1/local-audio/attempt_1777914637594_6596"
+    },
+    {
+      "id": "attempt_1777915223883_7495",
+      "attemptId": "attempt_1777915223883_7495",
+      "missionId": "mission_1777898061711_1682",
+      "classId": "class_1777897748345_5190",
+      "studentEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "duration": 44,
+      "status": "completed",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Sua gravação teve 4 pausas longas. Tente falar com mais fluidez e menos interrupções.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Continue articulando bem as palavras.",
+          "rhythm": "Reduza as pausas e mantenha o fluxo.",
+          "organization": "Suas ideias foram bem apresentadas."
+        },
+        "details": {
+          "wordsPerMinute": 150,
+          "pauseCount": 4,
+          "makesSense": true,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-05-04T17:20:23.985Z"
+      },
+      "createdAt": "2026-05-04T17:20:23.883Z",
+      "updatedAt": "2026-05-04T17:20:23.985Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\local-audio\\attempt_1777915223883_7495.webm",
+      "audioUrl": "http://localhost:8080/v1/local-audio/attempt_1777915223883_7495"
+    },
+    {
+      "id": "attempt_1777916318612_5455",
+      "attemptId": "attempt_1777916318612_5455",
+      "missionId": "mission_1777898061711_1682",
+      "classId": "class_1777897748345_5190",
+      "studentEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "duration": 93,
+      "status": "completed",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Detectamos áudio, mas ainda não há transcrição para medir pausas longas com precisão.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Fale de forma mais nítida para melhorar a análise.",
+          "rhythm": "Mantenha um ritmo constante durante a resposta.",
+          "organization": "Estruture início, meio e fim da resposta."
+        },
+        "details": {
+          "wordsPerMinute": 0,
+          "pauseCount": 0,
+          "makesSense": false,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-05-04T17:38:38.726Z"
+      },
+      "createdAt": "2026-05-04T17:38:38.612Z",
+      "updatedAt": "2026-05-04T17:38:38.726Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\local-audio\\attempt_1777916318612_5455.webm",
+      "audioUrl": "http://localhost:8080/v1/local-audio/attempt_1777916318612_5455"
+    },
+    {
+      "id": "attempt_1777916375798_3399",
+      "attemptId": "attempt_1777916375798_3399",
+      "missionId": "mission_1777898061711_1682",
+      "classId": "class_1777897748345_5190",
+      "studentEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "duration": 81,
+      "status": "completed",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Detectamos áudio, mas ainda não há transcrição para medir pausas longas com precisão.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Fale de forma mais nítida para melhorar a análise.",
+          "rhythm": "Mantenha um ritmo constante durante a resposta.",
+          "organization": "Estruture início, meio e fim da resposta."
+        },
+        "details": {
+          "wordsPerMinute": 0,
+          "pauseCount": 0,
+          "makesSense": false,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-05-04T17:39:35.919Z"
+      },
+      "createdAt": "2026-05-04T17:39:35.798Z",
+      "updatedAt": "2026-05-04T17:39:35.919Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\local-audio\\attempt_1777916375798_3399.webm",
+      "audioUrl": "http://localhost:8080/v1/local-audio/attempt_1777916375798_3399"
+    },
+    {
+      "id": "attempt_1777916750909_2730",
+      "attemptId": "attempt_1777916750909_2730",
+      "missionId": "mission_1777898061711_1682",
+      "classId": "class_1777897748345_5190",
+      "studentEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "duration": 90,
+      "status": "completed",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Detectamos áudio, mas ainda não há transcrição para medir pausas longas com precisão.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Fale de forma mais nítida para melhorar a análise.",
+          "rhythm": "Mantenha um ritmo constante durante a resposta.",
+          "organization": "Estruture início, meio e fim da resposta."
+        },
+        "details": {
+          "wordsPerMinute": 0,
+          "pauseCount": 0,
+          "makesSense": false,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-05-04T17:45:51.084Z"
+      },
+      "createdAt": "2026-05-04T17:45:50.909Z",
+      "updatedAt": "2026-05-04T17:45:51.084Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\local-audio\\attempt_1777916750909_2730.webm",
+      "audioUrl": "http://localhost:8080/v1/local-audio/attempt_1777916750909_2730"
+    },
+    {
+      "id": "attempt_1777918635866_7630",
+      "attemptId": "attempt_1777918635866_7630",
+      "missionId": "mission_1777898061711_1682",
+      "classId": "class_1777897748345_5190",
+      "studentEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "duration": 45,
+      "status": "completed",
+      "transcript": "",
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Detectamos áudio, mas ainda não há transcrição para medir pausas longas com precisão.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Fale de forma mais nítida para melhorar a análise.",
+          "rhythm": "Mantenha um ritmo constante durante a resposta.",
+          "organization": "Estruture início, meio e fim da resposta."
+        },
+        "details": {
+          "wordsPerMinute": 0,
+          "pauseCount": 0,
+          "makesSense": false,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-05-04T18:17:19.905Z"
+      },
+      "createdAt": "2026-05-04T18:17:15.866Z",
+      "updatedAt": "2026-05-04T18:17:19.905Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\local-audio\\attempt_1777918635866_7630.webm",
+      "audioUrl": "http://localhost:8080/v1/local-audio/attempt_1777918635866_7630"
+    },
+    {
+      "id": "attempt_1777918875402_7430",
+      "attemptId": "attempt_1777918875402_7430",
+      "missionId": "mission_1777898061711_1682",
+      "classId": "class_1777897748345_5190",
+      "studentEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "duration": 91,
+      "status": "completed",
+      "transcript": "",
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Detectamos áudio, mas ainda não há transcrição para medir pausas longas com precisão.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Fale de forma mais nítida para melhorar a análise.",
+          "rhythm": "Mantenha um ritmo constante durante a resposta.",
+          "organization": "Estruture início, meio e fim da resposta."
+        },
+        "details": {
+          "wordsPerMinute": 0,
+          "pauseCount": 0,
+          "makesSense": false,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-05-04T18:21:22.604Z"
+      },
+      "createdAt": "2026-05-04T18:21:15.402Z",
+      "updatedAt": "2026-05-04T18:21:22.604Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\local-audio\\attempt_1777918875402_7430.webm",
+      "audioUrl": "http://localhost:8080/v1/local-audio/attempt_1777918875402_7430"
+    },
+    {
+      "id": "attempt_1777918903111_5701",
+      "attemptId": "attempt_1777918903111_5701",
+      "missionId": "mission_1777898061711_1682",
+      "classId": "class_1777897748345_5190",
+      "studentEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "duration": 108,
+      "status": "completed",
+      "transcript": "Hello, hello.",
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Fala detectada e transcrição disponível. Continue praticando para melhorar clareza e ritmo.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Pronuncie cada palavra de forma completa.",
+          "rhythm": "Mantenha um ritmo confortável e constante.",
+          "organization": "Conecte melhor as ideias entre as frases."
+        },
+        "details": {
+          "wordsPerMinute": 1,
+          "pauseCount": 0,
+          "makesSense": true,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-05-04T18:21:46.605Z"
+      },
+      "createdAt": "2026-05-04T18:21:43.111Z",
+      "updatedAt": "2026-05-04T18:22:04.318Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\local-audio\\attempt_1777918903111_5701.webm",
+      "audioUrl": "http://localhost:8080/v1/local-audio/attempt_1777918903111_5701",
+      "studentConfirmed": true
+    },
+    {
+      "id": "attempt_1777928105494_3368",
+      "attemptId": "attempt_1777928105494_3368",
+      "missionId": "mission_1777898061711_1682",
+      "classId": "class_1777897748345_5190",
+      "studentEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "duration": 80,
+      "status": "completed",
+      "transcript": "Hello.",
+      "feedback": null,
+      "aiFeedback": {
+        "text": "Fala detectada e transcrição disponível. Continue praticando para melhorar clareza e ritmo.",
+        "comprehensible": false,
+        "suggestions": {
+          "clarity": "Pronuncie cada palavra de forma completa.",
+          "rhythm": "Mantenha um ritmo confortável e constante.",
+          "organization": "Conecte melhor as ideias entre as frases."
+        },
+        "details": {
+          "wordsPerMinute": 1,
+          "pauseCount": 0,
+          "makesSense": true,
+          "language": "en-US"
+        },
+        "generatedAt": "2026-05-04T20:55:09.283Z"
+      },
+      "createdAt": "2026-05-04T20:55:05.494Z",
+      "updatedAt": "2026-05-04T20:55:23.886Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\local-audio\\attempt_1777928105494_3368.webm",
+      "audioUrl": "http://localhost:8080/v1/local-audio/attempt_1777928105494_3368",
+      "studentConfirmed": true
+    },
+    {
+      "id": "attempt_1777928556046_9565",
+      "attemptId": "attempt_1777928556046_9565",
+      "missionId": "mission_1777928512733_9167",
+      "classId": "class_1777928416640_560",
+      "studentEmail": "cristine.helorrayne@mail.uft.edu.br",
+      "duration": 74,
+      "status": "completed",
+      "transcript": null,
+      "feedback": null,
+      "aiFeedback": null,
+      "createdAt": "2026-05-04T21:02:36.046Z",
+      "updatedAt": "2026-05-04T21:02:36.163Z",
+      "localAudioPath": "C:\\Users\\crist_fja0mc1\\OneDrive\\Documentos\\VoiceUp\\services\\api\\local-audio\\attempt_1777928556046_9565.webm",
+      "audioUrl": "http://localhost:8080/v1/local-audio/attempt_1777928556046_9565"
+    }
+  ],
+  "localAccessUsers": [
+    {
+      "email": "superadmin@voiceup.dev",
+      "name": "Superadmin",
+      "role": "teacher",
+      "active": true,
+      "createdAt": "2026-05-04T12:25:34.181Z"
+    },
+    {
+      "email": "aluno.teste@voiceup.dev",
+      "name": "Aluno de teste",
+      "role": "student",
+      "active": true,
+      "classId": "class_1777897748345_5190",
+      "classIds": [
+        "class_1777897748345_5190"
+      ],
+      "createdAt": "2026-05-04T12:31:55.763Z",
+      "updatedAt": "2026-05-04T12:31:55.763Z"
+    },
+    {
+      "email": "cristine.helorrayne@mail.uft.edu.br",
+      "name": "cristine rodrigues",
+      "role": "student",
+      "school": "uft",
+      "classroom": "9",
+      "active": true,
+      "createdAt": "2026-05-04T12:59:02.796Z",
+      "updatedAt": "2026-05-04T21:00:52.532Z",
+      "classId": "class_1777928416640_560",
+      "classIds": [
+        "class_1777897748345_5190",
+        "class_1777928416640_560"
+      ]
+    },
+    {
+      "email": "helorraynerodrigues@seduc.to.gov.br",
+      "name": "heloisa",
+      "role": "teacher",
+      "school": "madre",
+      "classroom": "2",
+      "active": true,
+      "createdAt": "2026-05-04T21:19:41.381Z",
+      "updatedAt": "2026-05-04T21:19:41.381Z"
+    }
+  ],
+  "localClasses": [
+    {
+      "classId": "class_1777897748345_5190",
+      "name": "INGLES ",
+      "year": "1 ANO B",
+      "description": null,
+      "icon": "school",
+      "aiFeedback": true,
+      "teacherEmail": "cristinehelorrayne@gmail.com",
+      "createdAt": "2026-05-04T12:29:08.345Z"
+    },
+    {
+      "classId": "class_1777922260812_1663",
+      "name": "Turma de Teste",
+      "year": "2026",
+      "description": "Turma para testes",
+      "icon": "school",
+      "aiFeedback": true,
+      "teacherEmail": "crisinehelorrayne@gmail.com",
+      "createdAt": "2026-05-04T19:17:40.812Z"
+    },
+    {
+      "classId": "class_1777928399333_2460",
+      "name": "ingles2",
+      "year": "1",
+      "description": null,
+      "icon": "school",
+      "aiFeedback": true,
+      "teacherEmail": "cristinehelorrayne@gmail.com",
+      "createdAt": "2026-05-04T20:59:59.333Z"
+    },
+    {
+      "classId": "class_1777928416640_560",
+      "name": "ingles3",
+      "year": "3",
+      "description": null,
+      "icon": "group",
+      "aiFeedback": false,
+      "teacherEmail": "cristinehelorrayne@gmail.com",
+      "createdAt": "2026-05-04T21:00:16.640Z"
+    }
+  ]
+}
