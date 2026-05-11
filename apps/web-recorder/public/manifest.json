@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "VoiceUp",
   "version": "0.1.0",
-  "description": "Transforma o Google Classroom em um laboratório de idiomas inteligente, automatizando gravações e avaliações.",
+  "description": "Extensão para gravação de áudio em atividades de idiomas, com upload de exercícios e avaliação de tentativas.",
   "action": {
     "default_popup": "index.html",
     "default_icon": {
@@ -15,16 +15,5 @@
     "16": "icone.png",
     "48": "icone.png",
     "128": "icone.png"
-  },
-  "permissions": [
-    "storage",
-    "activeTab",
-    "scripting"
-  ],
-  "host_permissions": [
-    "https://classroom.google.com/*",
-    "https://*.googleusercontent.com/*",
-    "http://localhost:5174/*",
-    "http://localhost:8080/*"
-  ]
+  }
 }
