@@ -1,6 +1,3 @@
-import { initializeApp, getApps } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, type Auth } from 'firebase/auth';
-
 const localAuthBypassEnv = import.meta.env.VITE_LOCAL_AUTH_BYPASS === 'true';
 
 const firebaseConfig = {
@@ -26,18 +23,12 @@ const isFirebaseConfigValid = Boolean(
 export const localAuthBypass = localAuthBypassEnv || !isFirebaseConfigValid;
 export const firebaseConfigValid = isFirebaseConfigValid;
 
-const app = isFirebaseConfigValid && (getApps().length ? getApps()[0] : initializeApp(firebaseConfig));
-
-export const auth: Auth | null = localAuthBypass || !app ? null : getAuth(app);
-export const googleProvider = new GoogleAuthProvider();
-googleProvider.setCustomParameters({ prompt: 'select_account' });
+export const auth = null;
+export const googleProvider = null;
 
 export async function getAuthToken(forceRefresh = false): Promise<string | null> {
   if (localAuthBypass) return 'local-token';
-  if (!auth) return null;
-  const user = auth.currentUser;
-  if (!user) return null;
-  return user.getIdToken(forceRefresh);
+  return null;
 }
 
 export async function getAuthHeaders(): Promise<Record<string, string>> {

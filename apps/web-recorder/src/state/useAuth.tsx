@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { onAuthStateChanged, signInWithPopup, signOut, type User } from 'firebase/auth';
-import { auth, googleProvider, getAuthToken, localAuthBypass } from '../firebase';
+import { getAuthToken, localAuthBypass } from '../firebase';
 const localRole = (import.meta.env.VITE_LOCAL_ROLE as UserRole | undefined) ?? 'teacher';
 const localUserEmail = import.meta.env.VITE_LOCAL_USER_EMAIL ?? 'local@voiceup.dev';
 
@@ -22,8 +21,13 @@ const localSuperadminEmails = (String(import.meta.env.VITE_SUPERADMIN_EMAIL ?? l
 
 type UserRole = 'student' | 'teacher';
 
+interface AppUser {
+  uid: string;
+  email: string | null;
+}
+
 interface AuthContextValue {
-  user: User | null;
+  user: AppUser | null;
   loading: boolean;
   error: string | null;
   role: UserRole | null;
@@ -43,7 +47,7 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [role, setRole] = useState<UserRole | null>(null);
@@ -66,10 +70,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
       const overrideEmail = localOverrideEmail ?? localUserEmail;
-      const localUser = {
+      const localUser: AppUser = {
         uid: 'local-user',
         email: overrideEmail,
-      } as User;
+      };
       setUser(localUser);
       setLoading(false);
       setError(null);
@@ -77,19 +81,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setAccessDenied(false);
       return;
     }
-    if (!auth) {
-      setUser(null);
-      setLoading(false);
-      setError('Firebase auth nao configurado.');
-      return;
-    }
-    const unsubscribe = onAuthStateChanged(auth, (nextUser) => {
-      setUser(nextUser);
-      setLoading(false);
-      setError(null);
-    });
-    return () => unsubscribe();
-  }, []);
+
+    setUser(null);
+    setLoading(false);
+    setError('Firebase auth unavailable in this package.');
+    setIsSuperadmin(false);
+    setAccessDenied(false);
+  }, [localSignedOut, localOverrideEmail]);
 
   useEffect(() => {
     if (!localAuthBypass) return;
@@ -228,66 +226,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLocalOverrideEmail,
       setLocalOverrideIsSuperadmin,
       signIn: async () => {
-        if (localAuthBypass) {
-          setLocalSignedOut(false);
-          const overrideEmail = localOverrideEmail ?? localUserEmail;
-          const localUser = {
-            uid: 'local-user',
-            email: overrideEmail,
-          } as User;
-          setUser(localUser);
-          const role = localOverrideRole ?? localRole;
-          setRole(role);
-          const isLocalSuperadmin =
-            role !== 'student' &&
-            (localOverrideIsSuperadmin ?? localSuperadminEmails.includes(overrideEmail.toLowerCase()));
-          setIsSuperadmin(isLocalSuperadmin);
-          setAccessDenied(false);
-          return;
-        }
-        try {
-          setError(null);
-          if (!auth) {
-            throw new Error('Firebase auth nao configurado.');
-          }
-          if (auth.currentUser) {
-            await signOut(auth);
-          }
-          googleProvider.setCustomParameters({ prompt: 'select_account', login_hint: '' });
-          await signInWithPopup(auth, googleProvider);
-          const currentUser = auth.currentUser;
-          if (currentUser) {
-            await currentUser.getIdToken(true);
-          }
-        } catch (err) {
-          const message = err instanceof Error ? err.message : 'Falha ao entrar com Google.';
-          setError(message);
-        }
+        setLocalSignedOut(false);
+        const overrideEmail = localOverrideEmail ?? localUserEmail;
+        const localUser: AppUser = {
+          uid: 'local-user',
+          email: overrideEmail,
+        };
+        setUser(localUser);
+        const role = localOverrideRole ?? localRole;
+        setRole(role);
+        const isLocalSuperadmin =
+          role !== 'student' &&
+          (localOverrideIsSuperadmin ?? localSuperadminEmails.includes(overrideEmail.toLowerCase()));
+        setIsSuperadmin(isLocalSuperadmin);
+        setAccessDenied(false);
       },
       signOutUser: async () => {
-        if (localAuthBypass) {
-          setLocalSignedOut(true);
-          setUser(null);
-          setRole(null);
-          setIsSuperadmin(false);
-          setAccessDenied(false);
-          return;
-        }
-        try {
-          if (auth) {
-            await signOut(auth);
-          }
-        } catch (err) {
-          console.error('Failed to sign out', err);
-        } finally {
-          setUser(null);
-          setRole(null);
-          setIsSuperadmin(false);
-          setAccessDenied(false);
-          if (typeof window !== 'undefined') {
-            window.location.reload();
-          }
-        }
+        setLocalSignedOut(true);
+        setUser(null);
+        setRole(null);
+        setIsSuperadmin(false);
+        setAccessDenied(false);
       },
     }),
     [
