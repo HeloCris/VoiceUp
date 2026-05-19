@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { getAuthToken, localAuthBypass } from '../firebase';
-const localRole = (import.meta.env.VITE_LOCAL_ROLE as UserRole | undefined) ?? 'teacher';
+const localRole = (import.meta.env.VITE_LOCAL_ROLE as UserRole | undefined) ?? 'student';
 const localUserEmail = import.meta.env.VITE_LOCAL_USER_EMAIL ?? 'local@voiceup.dev';
 
 const normalizeEmail = (value: string) => {

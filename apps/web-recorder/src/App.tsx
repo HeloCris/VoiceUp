@@ -11,7 +11,7 @@ import AdminAccessPage from './pages/AdminAccessPage';
 import TeacherClassesPage from './pages/TeacherClassesPage';
 import TeacherStudentsPage from './pages/TeacherStudentsPage';
 import { useAuth } from './state/useAuth';
-import { firebaseConfigValid } from './firebase';
+import { firebaseConfigValid, localAuthBypass } from './firebase';
 
 type Role = 'student' | 'teacher';
 
@@ -146,6 +146,10 @@ function HomePage() {
 
   useEffect(() => {
     if (!user || accessDenied || roleLoading) return;
+    if (localAuthBypass) {
+      navigate('/recorder', { replace: true });
+      return;
+    }
     const normalizeEmail = (value: string) => {
       const trimmed = value.trim().toLowerCase();
       const [local, domain] = trimmed.split('@');
@@ -218,6 +222,11 @@ function HomePage() {
           Faça login com sua conta Google para acessar a plataforma e começar a gravar suas missões.
         </Typography>
       </Box>
+      {user ? (
+        <Button variant="contained" size="large" onClick={() => navigate('/recorder')}>
+          Abrir gravador
+        </Button>
+      ) : null}
       {!user ? (
         <SignInGate />
       ) : (
@@ -245,7 +254,7 @@ export default function App() {
         <Route path="/teacher/classes" element={<RoleGate allow={['teacher']}><TeacherClassesPage /></RoleGate>} />
         <Route path="/teacher/classes/:id" element={<RoleGate allow={['teacher']}><TeacherClassAttemptsPage /></RoleGate>} />
         <Route path="/teacher/students" element={<RoleGate allow={['teacher']}><TeacherStudentsPage /></RoleGate>} />
-        <Route path="/recorder" element={<RoleGate allow={['student']}><RecorderPage /></RoleGate>} />
+        <Route path="/recorder" element={<RecorderPage />} />
         <Route path="/admin/access" element={<TeacherOrSuperAdminGate><AdminAccessPage /></TeacherOrSuperAdminGate>} />
       </Route>
     </Routes>
