@@ -1,4 +1,5 @@
 const localAuthBypassEnv = import.meta.env.VITE_LOCAL_AUTH_BYPASS === 'true';
+const isRunningInExtension = typeof window !== 'undefined' && window.location.protocol === 'chrome-extension:';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -20,7 +21,7 @@ const isFirebaseConfigValid = Boolean(
     firebaseConfig.measurementId
 );
 
-export const localAuthBypass = localAuthBypassEnv || !isFirebaseConfigValid;
+export const localAuthBypass = localAuthBypassEnv || !isFirebaseConfigValid || isRunningInExtension;
 export const firebaseConfigValid = isFirebaseConfigValid;
 
 export const auth = null;
