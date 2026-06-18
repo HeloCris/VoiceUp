@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "VoiceUp",
   "version": "0.1.0",
-  "description": "Extensão para gravação de áudio em atividades de idiomas, com upload de exercícios e avaliação de tentativas.",
+  "description": "Extensão para prática de comunicação com gravação de áudio no navegador.",
   "action": {
     "default_popup": "index.html",
     "default_icon": {

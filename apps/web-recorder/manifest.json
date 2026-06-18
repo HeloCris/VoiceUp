@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "VoiceUp",
   "version": "0.1.0",
-  "description": "Transforma o Google Classroom em um laboratório de idiomas inteligente, automatizando gravações e avaliações.",
+  "description": "Extensão para prática de comunicação com gravação de áudio no navegador.",
   "action": {
     "default_popup": "index.html",
     "default_icon": {

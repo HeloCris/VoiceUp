@@ -1,2 +1,2 @@
 # VoiceUp
-Uma extensão para o Chrome que transforma o Google Classroom em um laboratório de idiomas inteligente, automatizando a coleta e a avaliação de áudios.
+Uma extensão para o Chrome focada em prática de comunicação e gravação de áudio no navegador.
