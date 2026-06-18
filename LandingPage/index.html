@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceUp - Extensão para Comunicação</title>
+    <meta name="description" content="VoiceUp é uma extensão para Chrome focada em gravação e prática de comunicação.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="images/logo stamp.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --voiceup-indigo: #3d2a7a;
+            --voiceup-violet: #7c5cff;
+            --voiceup-sky: #56c2ff;
+            --voiceup-surface: #f6f2ff;
+        }
+
+        body {
+            background-image: url('images/salad pattern-1st.png');
+            background-repeat: repeat;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+        }
+
+        .highlight { color: var(--voiceup-violet); }
+
+        .badge {
+            background: rgba(124, 92, 255, 0.12);
+            color: var(--voiceup-indigo);
+            border: 1px solid rgba(124, 92, 255, 0.24);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--voiceup-violet), var(--voiceup-sky));
+            color: #ffffff;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 32px rgba(61, 42, 122, 0.24);
+        }
+
+        .btn-outline {
+            color: var(--voiceup-indigo);
+            border: 2px solid rgba(61, 42, 122, 0.18);
+            background-color: rgba(255, 255, 255, 0.55);
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(61, 42, 122, 0.08);
+            color: var(--voiceup-indigo);
+        }
+
+        .feature-list li::before, .download-features svg {
+            color: var(--voiceup-violet);
+        }
+
+        .about-icon svg { stroke: #ffffff; }
+
+        .step-number {
+            background: linear-gradient(135deg, var(--voiceup-violet), var(--voiceup-sky));
+            color: #ffffff;
+            box-shadow: 0 12px 24px rgba(124, 92, 255, 0.22);
+        }
+
+        .nav-link:hover { color: var(--voiceup-violet); }
+        .logo a { color: var(--voiceup-indigo); }
+
+        .hero-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 24px;
+            box-shadow: 0 24px 48px rgba(29, 22, 53, 0.18);
+        }
+
+        .download-options {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .download-option {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: left;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .download-option h3 {
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .extension-title {
+            color: var(--voiceup-indigo);
+        }
+
+        .download-option p {
+            color: rgba(29, 22, 53, 0.78);
+            margin-bottom: 16px;
+            font-size: 15px;
+        }
+
+        .download-link {
+            width: 100%;
+        }
+
+        .download-link[aria-disabled="true"] {
+            pointer-events: none;
+            opacity: 0.65;
+        }
+
+        .download-note {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .download-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="#inicio">
+                    <span>VoiceUp</span>
+                </a>
+            </div>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="#inicio" class="nav-link">Início</a></li>
+                    <li><a href="#sobre" class="nav-link">Sobre</a></li>
+                    <li><a href="#recursos" class="nav-link">Recursos</a></li>
+                    <li><a href="#como-funciona" class="nav-link">Como Funciona</a></li>
+                    <li><a href="#download" class="nav-link">Download</a></li>
+                </ul>
+            </nav>
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <section id="inicio" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="badge">
+                        <span>🎙️ VoiceUp para Chrome</span>
+                    </div>
+                    <h1>
+                        Sua voz<br>
+                        com mais<br>
+                        <span class="highlight">clareza e</span><br>
+                        confiança<br>
+                        todos os dias
+                    </h1>
+                    <p>
+                        O VoiceUp é uma extensão para navegador com foco em gravação, prática e evolução da comunicação.
+                    </p>
+                    
+                    <div class="hero-buttons">
+                        <a href="https://github.com/HeloCris/VoiceUp/releases/latest/download/voiceup-extension.zip" class="btn btn-primary" download>
+                            <span>Baixar VoiceUp</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </a>
+                        <a href="#como-funciona" class="btn btn-outline">Como Funciona</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="voice-layer-3"></div>
+                    
+                    <div class="character-container">
+                        <img src="images/audio-ativo.gif" alt="Animação de Áudio Ativo" class="hero-image">
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sobre" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>Sobre o VoiceUp</h2>
+                <p>Uma extensão pensada para treinar comunicação, capturar áudio e acompanhar evolução com consistência.</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-item">
+                    <div class="about-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </div>
+                    <h3>Treino Guiado</h3>
+                    <p>Rotinas objetivas para dicção, leitura em voz alta, projeção e fluidez verbal.</p>
+                </div>
+                <div class="about-item">
+                    <div class="about-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                            <path d="M2 12l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <h3>Análise Automática</h3>
+                    <p>O fluxo do produto foi pensado para automatizar gravações, organizar tentativas e apoiar avaliação.</p>
+                </div>
+                <div class="about-item">
+                    <div class="about-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <h3>Uso em Qualquer Lugar</h3>
+                    <p>Use a extensão diretamente no navegador em qualquer computador, com fluxo rápido e prático.</p>
+                </div>
+                <div class="about-item">
+                    <div class="about-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Evolução Constante</h3>
+                    <p>O acompanhamento contínuo ajuda a perceber progresso real ao longo das sessões.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="recursos" class="features">
+        <div class="container">
+            <div class="section-header">
+                        <h2>Recursos do VoiceUp</h2>
+                        <p>A extensão centraliza treino, captura e acompanhamento em uma única experiência.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-content">
+                        <h3>Trilhas Personalizadas</h3>
+                        <p>Navegue por rotas de treino focadas nas suas necessidades de comunicação.</p>
+                        <ul class="feature-list">
+                            <li>Exercícios de respiração e dicção</li>
+                            <li>Técnicas de oratória e persuasão</li>
+                            <li>Simulação de entrevistas e reuniões</li>
+                        </ul>
+                    </div>
+                    <div class="feature-image">
+                        <div class="feature-illustration person-laptop" aria-label="Pessoa estudando em um computador">
+                            <svg width="220" height="180" viewBox="0 0 220 180" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+                                <rect x="18" y="24" width="184" height="132" rx="20" fill="#F3EEFF"/>
+                                <circle cx="80" cy="76" r="16" fill="#8E72FF"/>
+                                <rect x="58" y="96" width="44" height="28" rx="14" fill="#7C5CFF"/>
+                                <rect x="108" y="88" width="66" height="40" rx="8" fill="#56C2FF"/>
+                                <rect x="116" y="96" width="50" height="24" rx="4" fill="white"/>
+                                <rect x="100" y="132" width="82" height="6" rx="3" fill="#AFA3DD"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-item reverse">
+                    <div class="feature-image">
+                        <div class="feature-illustration person-mic" aria-label="Pessoa usando microfone e análise de voz">
+                            <svg width="220" height="180" viewBox="0 0 220 180" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+                                <rect x="18" y="24" width="184" height="132" rx="20" fill="#F3EEFF"/>
+                                <circle cx="76" cy="82" r="16" fill="#8E72FF"/>
+                                <rect x="54" y="102" width="44" height="26" rx="13" fill="#7C5CFF"/>
+                                <rect x="126" y="58" width="18" height="34" rx="9" fill="#7C5CFF"/>
+                                <rect x="132" y="92" width="6" height="22" rx="3" fill="#7C5CFF"/>
+                                <path d="M122 112H148" stroke="#7C5CFF" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M154 74C162 74 162 86 154 86" stroke="#56C2FF" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M162 68C174 68 174 92 162 92" stroke="#56C2FF" stroke-width="4" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Análise de Voz em Tempo Real</h3>
+                        <p>Grave sua fala e organize a avaliação com uma visão clara do desempenho vocal.</p>
+                        <ul class="feature-list">
+                            <li>Controle de velocidade (BPM)</li>
+                            <li>Detecção de vícios de linguagem ("é", "hum")</li>
+                            <li>Métricas de clareza e pausas dramáticas</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-content">
+                        <h3>Experiência Conectada</h3>
+                        <p>A proposta é manter a jornada no navegador consistente, clara e simples de usar.</p>
+                        <ul class="feature-list">
+                            <li>Módulos gratuitos semanais</li>
+                            <li>Planos Premium para relatórios detalhados</li>
+                            <li>Pagamento seguro e gerenciamento fácil</li>
+                        </ul>
+                    </div>
+                    <div class="feature-image">
+                        <div class="feature-illustration person-phone" aria-label="Pessoa usando celular com tela de plano">
+                            <svg width="220" height="180" viewBox="0 0 220 180" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+                                <rect x="18" y="24" width="184" height="132" rx="20" fill="#F3EEFF"/>
+                                <circle cx="74" cy="80" r="16" fill="#8E72FF"/>
+                                <rect x="52" y="100" width="44" height="28" rx="14" fill="#7C5CFF"/>
+                                <rect x="126" y="58" width="36" height="68" rx="10" fill="#56C2FF"/>
+                                <rect x="132" y="66" width="24" height="46" rx="4" fill="white"/>
+                                <path d="M138 78H150" stroke="#7C5CFF" stroke-width="3" stroke-linecap="round"/>
+                                <path d="M138 88H150" stroke="#7C5CFF" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-item reverse">
+                    <div class="feature-image">
+                        <div class="feature-illustration people-community" aria-label="Duas pessoas colaborando em computador">
+                            <svg width="220" height="180" viewBox="0 0 220 180" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+                                <rect x="18" y="24" width="184" height="132" rx="20" fill="#F3EEFF"/>
+                                <circle cx="66" cy="76" r="13" fill="#8E72FF"/>
+                                <rect x="50" y="92" width="32" height="24" rx="12" fill="#7C5CFF"/>
+                                <circle cx="102" cy="84" r="13" fill="#9A82FF"/>
+                                <rect x="86" y="100" width="32" height="24" rx="12" fill="#7C5CFF"/>
+                                <rect x="128" y="74" width="52" height="34" rx="7" fill="#56C2FF"/>
+                                <rect x="136" y="82" width="36" height="18" rx="4" fill="white"/>
+                                <path d="M122 122H182" stroke="#AFA3DD" stroke-width="6" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Comunidade e Desafios</h3>
+                        <p>Desafios e exercícios sustentam a rotina de prática e ajudam a manter constância.</p>
+                        <ul class="feature-list">
+                            <li>Desafios semanais de leitura dinâmica</li>
+                            <li>Fórum de troca de feedbacks</li>
+                            <li>Conquistas e recompensas (Gamificação)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="como-funciona" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>Como Funciona</h2>
+                <p>Em poucos passos, comece a usar a extensão como parte do seu treino.</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Baixe os artefatos</h3>
+                        <p>Baixe a extensão direto da última release publicada no GitHub.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Faça o teste inicial</h3>
+                        <p>Leia o texto diagnóstico para registrar uma primeira referência de voz.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Treine diariamente</h3>
+                        <p>Siga as lições recomendadas e faça sessões curtas com regularidade.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Acompanhe a evolução</h3>
+                        <p>Monitore os resultados e ganhe confiança para falar em público.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="section-header">
+                <h2>Funcionamento da Extensão</h2>
+                <p>Veja telas reais da extensão em uso.</p>
+            </div>
+            <div class="app-showcase">
+                <img src="images/funcionamento-login.png" alt="Tela de login da extensão VoiceUp" class="app-screenshot">
+                <img src="images/funcionamento-gravacao.png" alt="Tela de gravação da extensão VoiceUp" class="app-screenshot">
+                <img src="images/funcionamento-criar-turma.png" alt="Tela de criação de turma na extensão VoiceUp" class="app-screenshot">
+            </div>
+        </div>
+    </section>
+
+    <section id="download" class="download">
+        <div class="container">
+            <div class="download-content">
+                <div class="download-text">
+                    <h2>Baixe a Extensão VoiceUp</h2>
+                    <p>Faça o download do pacote ZIP oficial para instalar no Chrome.</p>
+                    <ul class="download-features">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Extensão pronta para instalar</span>
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Exercícios práticos diários</span>
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Resultados visíveis em semanas</span>
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Eleve sua autoconfiança</span>
+                        </li>
+                    </ul>
+                    <div class="download-options">
+                        <div class="download-option">
+                            <h3 class="extension-title">VoiceUp Extensão</h3>
+                            <p>Baixe o arquivo oficial da extensão e carregue no Chrome em modo desenvolvedor.</p>
+                            <a href="https://github.com/HeloCris/VoiceUp/releases/latest/download/voiceup-extension.zip" class="btn btn-outline download-link">
+                                <span>Baixar extensão</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span>VoiceUp</span>
+                    <p>Potencializando vozes e transformando a comunicação desde 2026.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h3>Navegação</h3>
+                        <ul>
+                            <li><a href="#inicio">Início</a></li>
+                            <li><a href="#sobre">Sobre</a></li>
+                            <li><a href="#recursos">Recursos</a></li>
+                            <li><a href="#como-funciona">Como Funciona</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Alessandra Quirino e Helorrayne Cristine. VoiceUp. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
