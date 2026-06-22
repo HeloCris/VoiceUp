@@ -11,6 +11,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export type RecorderStatus = 'idle' | 'recording' | 'review';
 
@@ -41,6 +42,7 @@ export default function RecorderControls({
   onStop,
   onReset,
 }: RecorderControlsProps) {
+  const navigate = useNavigate();
   const statusLabel = useMemo(() => {
     switch (status) {
       case 'recording':
@@ -105,7 +107,7 @@ export default function RecorderControls({
         </Typography>
         <Button
           variant="outlined"
-          onClick={() => window.open('/attempts', '_self')}
+          onClick={() => navigate('/attempts')}
           sx={{ alignSelf: 'flex-start' }}
         >
           Ver histórico
