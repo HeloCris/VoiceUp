@@ -183,6 +183,15 @@ const isFirestoreUnavailableError = (error: unknown) => {
     message.includes('not authenticated') ||
     message.includes('unauthenticated') ||
     message.includes('failed to connect') ||
+    message.includes('default credentials') ||
+    message.includes('application default credentials') ||
+    message.includes('could not load the default credentials') ||
+    message.includes('failed to determine project id') ||
+    message.includes('unable to detect a project id') ||
+    message.includes('project id is required') ||
+    message.includes('failed to initialize firebase') ||
+    message.includes('credential implementation provided to initializeapp') ||
+    message.includes('missing or insufficient permissions') ||
     (message.includes('firestore') && message.includes('disabled')) ||
     message.includes('error: 7') ||
     message.includes('permission denied')
@@ -202,7 +211,12 @@ const shouldUseLocalFallback = (error: unknown) => {
     message.includes('ecconnrefused') ||
     message.includes('connection refused') ||
     message.includes('connect timeout') ||
-    message.includes('timeout')
+    message.includes('timeout') ||
+    message.includes('default credentials') ||
+    message.includes('application default credentials') ||
+    message.includes('could not load the default credentials') ||
+    message.includes('unable to detect a project id') ||
+    message.includes('failed to initialize firebase')
   );
 };
 
@@ -510,7 +524,7 @@ app.use('/v1', async (req: Request, res: Response, next) => {
   try {
     accessDoc = await firestore.collection(USERS_COLLECTION).doc(email).get();
   } catch (error: unknown) {
-    if (isFirestoreUnavailableError(error)) {
+    if (shouldUseLocalFallback(error)) {
       const localUser = getLocalAccessByEmail(email);
       if (localUser) {
         const localRole = localUser.role === 'teacher' ? 'teacher' : 'student';
