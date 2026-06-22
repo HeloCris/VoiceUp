@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { getAuthToken, localAuthBypass } from '../firebase';
+import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import { auth, getAuthToken, googleProvider, localAuthBypass } from '../firebase';
 const localRole = (import.meta.env.VITE_LOCAL_ROLE as UserRole | undefined) ?? 'student';
 const localUserEmail = import.meta.env.VITE_LOCAL_USER_EMAIL ?? 'local@voiceup.dev';
 
@@ -82,11 +83,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    setUser(null);
-    setLoading(false);
-    setError('Firebase auth unavailable in this package.');
-    setIsSuperadmin(false);
-    setAccessDenied(false);
+    if (!auth) {
+      setUser(null);
+      setLoading(false);
+      setError('Firebase auth indisponivel. Verifique as variaveis VITE_FIREBASE_* .');
+      setIsSuperadmin(false);
+      setAccessDenied(false);
+      return;
+    }
+
+    setLoading(true);
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (firebaseUser) => {
+        if (!firebaseUser) {
+          setUser(null);
+          setIsSuperadmin(false);
+          setAccessDenied(false);
+          setLoading(false);
+          return;
+        }
+        const authUser: AppUser = {
+          uid: firebaseUser.uid,
+          email: firebaseUser.email ?? null,
+        };
+        setUser(authUser);
+        setError(null);
+        setLoading(false);
+      },
+      (authError) => {
+        console.error('Firebase auth listener failed', authError);
+        setUser(null);
+        setError('Falha no login do Firebase.');
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
   }, [localSignedOut, localOverrideEmail]);
 
   useEffect(() => {
@@ -226,6 +259,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLocalOverrideEmail,
       setLocalOverrideIsSuperadmin,
       signIn: async () => {
+        if (!localAuthBypass) {
+          if (!auth || !googleProvider) {
+            setError('Firebase auth indisponivel.');
+            return;
+          }
+          try {
+            setError(null);
+            await signInWithPopup(auth, googleProvider);
+          } catch (loginError) {
+            console.error('Firebase login failed', loginError);
+            setError('Nao foi possivel entrar com Google.');
+          }
+          return;
+        }
+
         setLocalSignedOut(false);
         const overrideEmail = localOverrideEmail ?? localUserEmail;
         const localUser: AppUser = {
@@ -242,6 +290,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setAccessDenied(false);
       },
       signOutUser: async () => {
+        if (!localAuthBypass) {
+          if (!auth) return;
+          try {
+            await signOut(auth);
+          } catch (logoutError) {
+            console.error('Firebase logout failed', logoutError);
+          }
+          setUser(null);
+          setRole(null);
+          setIsSuperadmin(false);
+          setAccessDenied(false);
+          return;
+        }
+
         setLocalSignedOut(true);
         setUser(null);
         setRole(null);
