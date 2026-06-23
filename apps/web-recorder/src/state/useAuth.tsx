@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signInWithPopup, signInWithRedirect, signOut } from 'firebase/auth';
 import { auth, getAuthToken, googleProvider, localAuthBypass } from '../firebase';
 const localRole = (import.meta.env.VITE_LOCAL_ROLE as UserRole | undefined) ?? 'student';
 const localUserEmail = import.meta.env.VITE_LOCAL_USER_EMAIL ?? 'local@voiceup.dev';
@@ -267,9 +267,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           try {
             setError(null);
             await signInWithPopup(auth, googleProvider);
-          } catch (loginError) {
-            console.error('Firebase login failed', loginError);
-            setError('Nao foi possivel entrar com Google.');
+          } catch (loginError: any) {
+            const code = typeof loginError?.code === 'string' ? loginError.code : '';
+            console.error('Firebase login failed (popup)', loginError);
+
+            // In extension environments, popup may be blocked or unsupported.
+            if (
+              code === 'auth/popup-blocked' ||
+              code === 'auth/popup-closed-by-user' ||
+              code === 'auth/operation-not-supported-in-this-environment'
+            ) {
+              try {
+                await signInWithRedirect(auth, googleProvider);
+                return;
+              } catch (redirectError: any) {
+                const redirectCode = typeof redirectError?.code === 'string' ? redirectError.code : 'unknown';
+                console.error('Firebase login failed (redirect)', redirectError);
+                setError(`Nao foi possivel entrar com Google (${redirectCode}).`);
+                return;
+              }
+            }
+
+            setError(`Nao foi possivel entrar com Google${code ? ` (${code})` : ''}.`);
           }
           return;
         }
