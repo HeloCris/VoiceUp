@@ -17,6 +17,7 @@
     "128": "public/icone.png"
   },
   "permissions": [
+    "identity",
     "storage",
     "activeTab"
   ],

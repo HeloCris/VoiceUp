@@ -48,6 +48,7 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const extensionEmailStorageKey = 'voiceup_extension_google_email';
   const [user, setUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -76,6 +77,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return `Nao foi possivel entrar com Google (${message}).`;
     }
     return 'Nao foi possivel entrar com Google.';
+  };
+
+  const tryChromeProfileSignIn = async () => {
+    try {
+      const chromeApi = (globalThis as any).chrome;
+      const identity = chromeApi?.identity;
+      if (!identity?.getProfileUserInfo) return false;
+
+      const profile = await new Promise<{ email?: string }>((resolve) => {
+        identity.getProfileUserInfo((info: { email?: string }) => resolve(info ?? {}));
+      });
+
+      const profileEmail = typeof profile?.email === 'string' ? profile.email.trim().toLowerCase() : '';
+      if (!profileEmail) return false;
+
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(extensionEmailStorageKey, profileEmail);
+      }
+
+      setUser({ uid: 'chrome-identity-user', email: profileEmail });
+      setError(null);
+      setAccessDenied(false);
+      return true;
+    } catch (identityError) {
+      console.error('Chrome identity fallback failed', identityError);
+      return false;
+    }
   };
 
   useEffect(() => {
@@ -121,6 +149,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       auth,
       (firebaseUser) => {
         if (!firebaseUser) {
+          const isExtensionContext =
+            typeof window !== 'undefined' && window.location.protocol === 'chrome-extension:';
+          const fallbackEmail =
+            isExtensionContext && typeof window !== 'undefined'
+              ? (window.localStorage.getItem(extensionEmailStorageKey) ?? '').trim().toLowerCase()
+              : '';
+          if (fallbackEmail) {
+            setUser({ uid: 'chrome-identity-user', email: fallbackEmail });
+            setIsSuperadmin(false);
+            setAccessDenied(false);
+            setLoading(false);
+            return;
+          }
+
           setUser(null);
           setIsSuperadmin(false);
           setAccessDenied(false);
@@ -215,19 +257,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setRoleLoading(true);
       try {
         let token = await getAuthToken(true);
-        if (!token) {
+        const fallbackEmail =
+          typeof window !== 'undefined'
+            ? (window.localStorage.getItem(extensionEmailStorageKey) ?? '').trim().toLowerCase()
+            : '';
+
+        const baseHeaders: Record<string, string> = token
+          ? { Authorization: `Bearer ${token}` }
+          : fallbackEmail
+          ? { 'x-local-user-email': fallbackEmail }
+          : {};
+
+        if (!token && !fallbackEmail) {
           setRole(null);
           setIsSuperadmin(false);
           setAccessDenied(false);
           return;
         }
+
         let response = await fetch(`${import.meta.env.VITE_API_URL}/v1/me`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: baseHeaders,
         });
         if (response.status === 401) {
           token = await getAuthToken(true);
+          const retryHeaders: Record<string, string> = token
+            ? { Authorization: `Bearer ${token}` }
+            : fallbackEmail
+            ? { 'x-local-user-email': fallbackEmail }
+            : {};
           response = await fetch(`${import.meta.env.VITE_API_URL}/v1/me`, {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: retryHeaders,
           });
         }
         if (!response.ok) {
@@ -315,7 +374,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               }
             }
 
-            setError(formatAuthError(loginError));
+            const signedInWithChromeProfile = await tryChromeProfileSignIn();
+            if (!signedInWithChromeProfile) {
+              setError(formatAuthError(loginError));
+            }
           }
           return;
         }
@@ -337,6 +399,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
       signOutUser: async () => {
         if (!localAuthBypass) {
+          if (typeof window !== 'undefined') {
+            window.localStorage.removeItem(extensionEmailStorageKey);
+          }
           if (!auth) return;
           try {
             await signOut(auth);
