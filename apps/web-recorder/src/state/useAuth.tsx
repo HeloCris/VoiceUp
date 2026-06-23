@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { getRedirectResult, onAuthStateChanged, signInWithPopup, signInWithRedirect, signOut } from 'firebase/auth';
+import { GoogleAuthProvider, getRedirectResult, onAuthStateChanged, signInWithCredential, signInWithPopup, signInWithRedirect, signOut } from 'firebase/auth';
 import { auth, getAuthToken, googleProvider, localAuthBypass } from '../firebase';
 const localRole = (import.meta.env.VITE_LOCAL_ROLE as UserRole | undefined) ?? 'student';
 const localUserEmail = import.meta.env.VITE_LOCAL_USER_EMAIL ?? 'local@voiceup.dev';
@@ -85,8 +85,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const identity = chromeApi?.identity;
       if (!identity?.getProfileUserInfo) return false;
 
-      const profile = await new Promise<{ email?: string }>((resolve) => {
-        identity.getProfileUserInfo((info: { email?: string }) => resolve(info ?? {}));
+      const profile = await new Promise<{ email?: string }>((resolve, reject) => {
+        identity.getProfileUserInfo((info: { email?: string } | null) => {
+          if (chromeApi.runtime?.lastError) {
+            reject(new Error(chromeApi.runtime.lastError.message));
+            return;
+          }
+          resolve(info ?? {});
+        });
       });
 
       const profileEmail = typeof profile?.email === 'string' ? profile.email.trim().toLowerCase() : '';
@@ -102,6 +108,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return true;
     } catch (identityError) {
       console.error('Chrome identity fallback failed', identityError);
+      return false;
+    }
+  };
+
+  const signInWithChromeIdentity = async () => {
+    try {
+      const chromeApi = (globalThis as any).chrome;
+      const identity = chromeApi?.identity;
+      if (!identity?.getAuthToken) return false;
+      if (!auth) return false;
+
+      const token = await new Promise<string>((resolve, reject) => {
+        identity.getAuthToken({ interactive: true }, (authToken: string | null) => {
+          if (chromeApi.runtime?.lastError) {
+            reject(new Error(chromeApi.runtime.lastError.message));
+            return;
+          }
+          if (!authToken) {
+            reject(new Error('chrome.identity.getAuthToken returned no token'));
+            return;
+          }
+          resolve(authToken);
+        });
+      });
+
+      const credential = GoogleAuthProvider.credential(null, token);
+      await signInWithCredential(auth, credential);
+
+      const email = auth.currentUser?.email;
+      if (email && typeof window !== 'undefined') {
+        window.localStorage.setItem(extensionEmailStorageKey, email.trim().toLowerCase());
+      }
+      return true;
+    } catch (identityError) {
+      console.error('Chrome identity token login failed', identityError);
       return false;
     }
   };
@@ -348,9 +389,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             return;
           }
 
-          const signedInWithChromeProfile = await tryChromeProfileSignIn();
-          if (signedInWithChromeProfile) {
-            return;
+          const isExtensionContext =
+            typeof window !== 'undefined' && window.location.protocol === 'chrome-extension:';
+          if (isExtensionContext) {
+            const chromeTokenSignedIn = await signInWithChromeIdentity();
+            if (chromeTokenSignedIn) {
+              return;
+            }
+            const chromeProfileSignedIn = await tryChromeProfileSignIn();
+            if (chromeProfileSignedIn) {
+              return;
+            }
           }
 
           try {
@@ -380,10 +429,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               }
             }
 
-            const fallbackAfterPopupFailure = await tryChromeProfileSignIn();
-            if (!fallbackAfterPopupFailure) {
-              setError(formatAuthError(loginError));
+            if (isExtensionContext) {
+              const fallbackAfterPopupFailure = await signInWithChromeIdentity();
+              if (fallbackAfterPopupFailure) {
+                return;
+              }
+              const profileFallback = await tryChromeProfileSignIn();
+              if (profileFallback) {
+                return;
+              }
             }
+
+            setError(formatAuthError(loginError));
           }
           return;
         }

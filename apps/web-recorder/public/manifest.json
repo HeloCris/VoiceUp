@@ -3,6 +3,19 @@
   "name": "VoiceUp",
   "version": "0.1.0",
   "description": "Extensão para gravação de áudio em atividades de idiomas, com upload de exercícios e avaliação de tentativas.",
+  "permissions": [
+    "identity",
+    "identity.email",
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://classroom.google.com/*",
+    "https://*.googleusercontent.com/*",
+    "https://voiceup-api.onrender.com/*",
+    "http://localhost:5174/*",
+    "http://localhost:8080/*"
+  ],
   "action": {
     "default_popup": "index.html",
     "default_icon": {
