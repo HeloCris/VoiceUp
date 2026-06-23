@@ -23,6 +23,7 @@
   "host_permissions": [
     "https://classroom.google.com/*",
     "https://*.googleusercontent.com/*",
+    "https://voiceup-api.onrender.com/*",
     "http://localhost:5174/*",
     "http://localhost:8080/*"
   ],

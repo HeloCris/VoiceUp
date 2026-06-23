@@ -9,10 +9,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: LOCAL_AUTH_BYPASS
-        value: "true"
-      - key: LOCAL_USER_EMAIL
-        value: local@voiceup.dev
-      - key: LOCAL_ROLE
-        value: student
+        value: "false"
       - key: PORT
         value: "8080"
