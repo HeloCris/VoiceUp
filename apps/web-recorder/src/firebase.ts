@@ -30,6 +30,7 @@ const isFirebaseConfigValid = Boolean(
 
 export const localAuthBypass = localAuthBypassEnv || !isFirebaseConfigValid;
 export const firebaseConfigValid = isFirebaseConfigValid;
+const extensionEmailStorageKey = 'voiceup_extension_google_email';
 
 const app = isFirebaseConfigValid ? (getApps().length ? getApp() : initializeApp(firebaseConfig)) : null;
 
@@ -61,6 +62,15 @@ export async function getAuthHeaders(): Promise<Record<string, string>> {
   const headers: Record<string, string> = {};
   const token = await getAuthToken();
   if (token) headers.Authorization = `Bearer ${token}`;
+
+  // In extension context, allow API auth fallback via Chrome profile email.
+  if (!token && typeof window !== 'undefined' && window.location.protocol === 'chrome-extension:') {
+    const extensionEmail = (window.localStorage.getItem(extensionEmailStorageKey) ?? '').trim().toLowerCase();
+    if (extensionEmail) {
+      headers['X-Local-User-Email'] = extensionEmail;
+    }
+  }
+
   if (localAuthBypass && typeof window !== 'undefined') {
     const localEmail = window.localStorage.getItem('voiceup_local_email');
     const localRole = window.localStorage.getItem('voiceup_local_role');

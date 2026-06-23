@@ -347,6 +347,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setError('Firebase auth indisponivel.');
             return;
           }
+
+          const signedInWithChromeProfile = await tryChromeProfileSignIn();
+          if (signedInWithChromeProfile) {
+            return;
+          }
+
           try {
             setError(null);
             await signInWithPopup(auth, googleProvider);
@@ -374,8 +380,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               }
             }
 
-            const signedInWithChromeProfile = await tryChromeProfileSignIn();
-            if (!signedInWithChromeProfile) {
+            const fallbackAfterPopupFailure = await tryChromeProfileSignIn();
+            if (!fallbackAfterPopupFailure) {
               setError(formatAuthError(loginError));
             }
           }
