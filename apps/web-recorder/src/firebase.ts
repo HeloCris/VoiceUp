@@ -28,14 +28,14 @@ const isFirebaseConfigValid = Boolean(
     firebaseConfig.messagingSenderId
 );
 
-export const localAuthBypass = localAuthBypassEnv || !isFirebaseConfigValid;
-export const firebaseConfigValid = isFirebaseConfigValid;
+export const localAuthBypass = true;
+export const firebaseConfigValid = false;
 const extensionEmailStorageKey = 'voiceup_extension_google_email';
 
-const app = isFirebaseConfigValid ? (getApps().length ? getApp() : initializeApp(firebaseConfig)) : null;
+const app = null;
 
-export const auth: Auth | null = app ? getAuth(app) : null;
-export const googleProvider = auth ? new GoogleAuthProvider() : null;
+export const auth: Auth | null = null;
+export const googleProvider = null;
 
 if (googleProvider) {
   googleProvider.setCustomParameters({ prompt: 'select_account' });

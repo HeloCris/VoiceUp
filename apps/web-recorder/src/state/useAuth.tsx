@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { GoogleAuthProvider, getRedirectResult, onAuthStateChanged, signInWithCredential, signInWithPopup, signInWithRedirect, signOut } from 'firebase/auth';
-import { auth, getAuthToken, googleProvider, localAuthBypass } from '../firebase';
+import { localAuthBypass } from '../firebase';
 const localRole = (import.meta.env.VITE_LOCAL_ROLE as UserRole | undefined) ?? 'student';
 const localUserEmail = import.meta.env.VITE_LOCAL_USER_EMAIL ?? 'local@voiceup.dev';
 
@@ -48,7 +47,6 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const extensionEmailStorageKey = 'voiceup_extension_google_email';
   const [user, setUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -60,92 +58,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [localOverrideRole, setLocalOverrideRole] = useState<UserRole | null>(null);
   const [localOverrideEmail, setLocalOverrideEmail] = useState<string | null>(null);
   const [localOverrideIsSuperadmin, setLocalOverrideIsSuperadmin] = useState<boolean | null>(null);
-
-  const formatAuthError = (err: any) => {
-    const code =
-      (typeof err?.code === 'string' && err.code) ||
-      (typeof err?.customData?.code === 'string' && err.customData.code) ||
-      (typeof err?.customData?._tokenResponse?.error?.message === 'string' &&
-        err.customData._tokenResponse.error.message) ||
-      '';
-    const message = typeof err?.message === 'string' ? err.message : '';
-
-    if (code) {
-      return `Nao foi possivel entrar com Google (${code}).`;
-    }
-    if (message) {
-      return `Nao foi possivel entrar com Google (${message}).`;
-    }
-    return 'Nao foi possivel entrar com Google.';
-  };
-
-  const tryChromeProfileSignIn = async () => {
-    try {
-      const chromeApi = (globalThis as any).chrome;
-      const identity = chromeApi?.identity;
-      if (!identity?.getProfileUserInfo) return false;
-
-      const profile = await new Promise<{ email?: string }>((resolve, reject) => {
-        identity.getProfileUserInfo((info: { email?: string } | null) => {
-          if (chromeApi.runtime?.lastError) {
-            reject(new Error(chromeApi.runtime.lastError.message));
-            return;
-          }
-          resolve(info ?? {});
-        });
-      });
-
-      const profileEmail = typeof profile?.email === 'string' ? profile.email.trim().toLowerCase() : '';
-      if (!profileEmail) return false;
-
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(extensionEmailStorageKey, profileEmail);
-      }
-
-      setUser({ uid: 'chrome-identity-user', email: profileEmail });
-      setError(null);
-      setAccessDenied(false);
-      return true;
-    } catch (identityError) {
-      console.error('Chrome identity fallback failed', identityError);
-      return false;
-    }
-  };
-
-  const signInWithChromeIdentity = async () => {
-    try {
-      const chromeApi = (globalThis as any).chrome;
-      const identity = chromeApi?.identity;
-      if (!identity?.getAuthToken) return false;
-      if (!auth) return false;
-
-      const token = await new Promise<string>((resolve, reject) => {
-        identity.getAuthToken({ interactive: true }, (authToken: string | null) => {
-          if (chromeApi.runtime?.lastError) {
-            reject(new Error(chromeApi.runtime.lastError.message));
-            return;
-          }
-          if (!authToken) {
-            reject(new Error('chrome.identity.getAuthToken returned no token'));
-            return;
-          }
-          resolve(authToken);
-        });
-      });
-
-      const credential = GoogleAuthProvider.credential(null, token);
-      await signInWithCredential(auth, credential);
-
-      const email = auth.currentUser?.email;
-      if (email && typeof window !== 'undefined') {
-        window.localStorage.setItem(extensionEmailStorageKey, email.trim().toLowerCase());
-      }
-      return true;
-    } catch (identityError) {
-      console.error('Chrome identity token login failed', identityError);
-      return false;
-    }
-  };
 
   useEffect(() => {
     if (localAuthBypass) {
@@ -170,63 +82,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    if (!auth) {
-      setUser(null);
-      setLoading(false);
-      setError('Firebase auth indisponivel. Verifique as variaveis VITE_FIREBASE_* .');
-      setIsSuperadmin(false);
-      setAccessDenied(false);
-      return;
-    }
-
-    setLoading(true);
-
-    getRedirectResult(auth).catch((redirectError) => {
-      console.error('Firebase redirect result failed', redirectError);
-      setError(formatAuthError(redirectError));
-    });
-
-    const unsubscribe = onAuthStateChanged(
-      auth,
-      (firebaseUser) => {
-        if (!firebaseUser) {
-          const isExtensionContext =
-            typeof window !== 'undefined' && window.location.protocol === 'chrome-extension:';
-          const fallbackEmail =
-            isExtensionContext && typeof window !== 'undefined'
-              ? (window.localStorage.getItem(extensionEmailStorageKey) ?? '').trim().toLowerCase()
-              : '';
-          if (fallbackEmail) {
-            setUser({ uid: 'chrome-identity-user', email: fallbackEmail });
-            setIsSuperadmin(false);
-            setAccessDenied(false);
-            setLoading(false);
-            return;
-          }
-
-          setUser(null);
-          setIsSuperadmin(false);
-          setAccessDenied(false);
-          setLoading(false);
-          return;
-        }
-        const authUser: AppUser = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email ?? null,
-        };
-        setUser(authUser);
-        setError(null);
-        setLoading(false);
-      },
-      (authError) => {
-        console.error('Firebase auth listener failed', authError);
-        setUser(null);
-        setError('Falha no login do Firebase.');
-        setLoading(false);
-      }
-    );
-
-    return () => unsubscribe();
+    setUser(null);
+    setLoading(false);
+    setError('Autenticação remota não está disponível.');
+    setIsSuperadmin(false);
+    setAccessDenied(false);
   }, [localSignedOut, localOverrideEmail]);
 
   useEffect(() => {
@@ -239,133 +99,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [localOverrideEmail, localOverrideRole]);
 
   useEffect(() => {
-    const loadRole = async () => {
-      if (localAuthBypass) {
-        if (localSignedOut) {
-          setRole(null);
-          setRoleLoading(false);
-          setIsSuperadmin(false);
-          setAccessDenied(false);
-          return;
-        }
-        setRoleLoading(true);
-        const localEmail = localOverrideEmail ?? localUserEmail;
-        const headers: Record<string, string> = {
-          'x-local-user-email': localEmail,
-        };
-        if (localOverrideRole) {
-          headers['x-local-role'] = localOverrideRole;
-        }
-
-        try {
-          const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/me`, {
-            headers,
-          });
-          if (response.status === 403) {
-            setRole(null);
-            setIsSuperadmin(false);
-            setAccessDenied(true);
-            return;
-          }
-          if (!response.ok) {
-            throw new Error(`Failed to load local profile: ${response.status}`);
-          }
-          const data = (await response.json()) as {
-            role?: UserRole;
-            isSuperadmin?: boolean;
-            active?: boolean;
-          };
-          setRole(data.role ?? 'student');
-          setIsSuperadmin(Boolean(data.isSuperadmin));
-          setAccessDenied(data.active === false);
-        } catch (err) {
-          const role = localOverrideRole ?? localRole;
-          setRole(role);
-          setIsSuperadmin(role !== 'student' && (localOverrideIsSuperadmin ?? false));
-          setAccessDenied(false);
-        } finally {
-          setRoleLoading(false);
-        }
-        return;
-      }
-      if (!user) {
+    if (localAuthBypass) {
+      if (localSignedOut) {
         setRole(null);
         setRoleLoading(false);
         setIsSuperadmin(false);
         setAccessDenied(false);
         return;
       }
-      setRoleLoading(true);
-      try {
-        let token = await getAuthToken(true);
-        const fallbackEmail =
-          typeof window !== 'undefined'
-            ? (window.localStorage.getItem(extensionEmailStorageKey) ?? '').trim().toLowerCase()
-            : '';
+      setRoleLoading(false);
+      const role = localOverrideRole ?? localRole;
+      setRole(role);
+      setIsSuperadmin(role !== 'student' && (localOverrideIsSuperadmin ?? false));
+      setAccessDenied(false);
+      return;
+    }
 
-        const baseHeaders: Record<string, string> = token
-          ? { Authorization: `Bearer ${token}` }
-          : fallbackEmail
-          ? { 'x-local-user-email': fallbackEmail }
-          : {};
-
-        if (!token && !fallbackEmail) {
-          setRole(null);
-          setIsSuperadmin(false);
-          setAccessDenied(false);
-          return;
-        }
-
-        let response = await fetch(`${import.meta.env.VITE_API_URL}/v1/me`, {
-          headers: baseHeaders,
-        });
-        if (response.status === 401) {
-          token = await getAuthToken(true);
-          const retryHeaders: Record<string, string> = token
-            ? { Authorization: `Bearer ${token}` }
-            : fallbackEmail
-            ? { 'x-local-user-email': fallbackEmail }
-            : {};
-          response = await fetch(`${import.meta.env.VITE_API_URL}/v1/me`, {
-            headers: retryHeaders,
-          });
-        }
-        if (!response.ok) {
-          const text = await response.text();
-          console.error('AUTH /v1/me failed', response.status, text);
-        }
-        if (response.status === 403) {
-          setRole(null);
-          setIsSuperadmin(false);
-          setAccessDenied(true);
-          return;
-        }
-        if (!response.ok) {
-          setRole(null);
-          setIsSuperadmin(false);
-          setAccessDenied(false);
-          return;
-        }
-        const data = (await response.json()) as {
-          role?: UserRole;
-          isSuperadmin?: boolean;
-          active?: boolean;
-        };
-        console.log('AUTH /v1/me success', { email: user?.email, ...data });
-        setRole(data.role ?? null);
-        setIsSuperadmin(Boolean(data.isSuperadmin));
-        setAccessDenied(data.active === false);
-      } catch (err) {
-        setRole(null);
-        setIsSuperadmin(false);
-        setAccessDenied(false);
-      } finally {
-        setRoleLoading(false);
-      }
-    };
-
-    loadRole();
-  }, [user]);
+    setRole(null);
+    setRoleLoading(false);
+    setIsSuperadmin(false);
+    setAccessDenied(false);
+  }, [localAuthBypass, localOverrideRole, localOverrideIsSuperadmin]);
 
   const value = useMemo(
     () => ({
@@ -384,65 +138,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLocalOverrideIsSuperadmin,
       signIn: async () => {
         if (!localAuthBypass) {
-          if (!auth || !googleProvider) {
-            setError('Firebase auth indisponivel.');
-            return;
-          }
-
-          const isExtensionContext =
-            typeof window !== 'undefined' && window.location.protocol === 'chrome-extension:';
-          if (isExtensionContext) {
-            const chromeTokenSignedIn = await signInWithChromeIdentity();
-            if (chromeTokenSignedIn) {
-              return;
-            }
-            const chromeProfileSignedIn = await tryChromeProfileSignIn();
-            if (chromeProfileSignedIn) {
-              return;
-            }
-          }
-
-          try {
-            setError(null);
-            await signInWithPopup(auth, googleProvider);
-          } catch (loginError: any) {
-            const code =
-              (typeof loginError?.code === 'string' && loginError.code) ||
-              (typeof loginError?.customData?._tokenResponse?.error?.message === 'string' &&
-                loginError.customData._tokenResponse.error.message) ||
-              '';
-            console.error('Firebase login failed (popup)', loginError);
-
-            // In extension environments, popup may be blocked or unsupported.
-            if (
-              code === 'auth/popup-blocked' ||
-              code === 'auth/popup-closed-by-user' ||
-              code === 'auth/operation-not-supported-in-this-environment' ||
-              code === 'auth/internal-error'
-            ) {
-              try {
-                await signInWithRedirect(auth, googleProvider);
-                return;
-              } catch (redirectError: any) {
-                console.error('Firebase login failed (redirect)', redirectError);
-                setError(formatAuthError(redirectError));
-                return;
-              }
-            }
-
-            if (isExtensionContext) {
-              const fallbackAfterPopupFailure = await signInWithChromeIdentity();
-              if (fallbackAfterPopupFailure) {
-                return;
-              }
-              const profileFallback = await tryChromeProfileSignIn();
-              if (profileFallback) {
-                return;
-              }
-            }
-
-            setError(formatAuthError(loginError));
-          }
+          setError('Autenticação local não está habilitada.');
           return;
         }
 

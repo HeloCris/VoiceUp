@@ -32,16 +32,11 @@ function SignInGate() {
           Entre para continuar
         </Typography>
         <Typography color="text.secondary">
-          Use sua conta Google para acessar as missoes e o feedback.
+          O login será feito localmente para permitir uso offline e teste.
         </Typography>
-        {!firebaseConfigValid ? (
-          <Typography color="warning.main">
-            Firebase não está configurado. O login operará em modo local de fallback.
-          </Typography>
-        ) : null}
         {error ? <Typography color="error">{error}</Typography> : null}
         <Button variant="contained" onClick={signIn} disabled={loading}>
-          Entrar com Google
+          Entrar localmente
         </Button>
       </Stack>
     </Box>
