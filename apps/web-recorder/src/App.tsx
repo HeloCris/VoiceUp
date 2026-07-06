@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Box, Button, Container, Stack, Typography } from '@mui/material';
+import { Box, Button, Container, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { Link, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import RecorderPage from './pages/RecorderPage';
 import AttemptsPage from './pages/AttemptsPage';
@@ -11,12 +11,20 @@ import AdminAccessPage from './pages/AdminAccessPage';
 import TeacherClassesPage from './pages/TeacherClassesPage';
 import TeacherStudentsPage from './pages/TeacherStudentsPage';
 import { useAuth } from './state/useAuth';
-import { firebaseConfigValid, localAuthBypass } from './firebase';
+import { localAuthBypass } from './firebase';
 
 type Role = 'student' | 'teacher';
 
 function SignInGate() {
-  const { signIn, loading, error } = useAuth();
+  const {
+    signIn,
+    loading,
+    error,
+    localOverrideEmail,
+    setLocalOverrideEmail,
+    localOverrideRole,
+    setLocalOverrideRole,
+  } = useAuth();
 
   return (
     <Box
@@ -32,7 +40,28 @@ function SignInGate() {
           Entre para continuar
         </Typography>
         <Typography color="text.secondary">
-          O login será feito localmente para permitir uso offline e teste.
+          Faça login localmente usando o email do superadmin ou de um usuário cadastrado.
+        </Typography>
+        <TextField
+          label="Email"
+          type="email"
+          value={localOverrideEmail ?? ''}
+          onChange={(event) => setLocalOverrideEmail(event.target.value)}
+          fullWidth
+        />
+        <TextField
+          select
+          label="Tipo de acesso"
+          value={localOverrideRole ?? 'student'}
+          onChange={(event) => setLocalOverrideRole(event.target.value as 'student' | 'teacher' | 'superadmin')}
+          fullWidth
+        >
+          <MenuItem value="student">Aluno</MenuItem>
+          <MenuItem value="teacher">Professor</MenuItem>
+          <MenuItem value="superadmin">Superadmin</MenuItem>
+        </TextField>
+        <Typography color="text.secondary" variant="caption">
+          Use {`cristinehelorrayne@gmail.com`} para entrar como superadmin.
         </Typography>
         {error ? <Typography color="error">{error}</Typography> : null}
         <Button variant="contained" onClick={signIn} disabled={loading}>
@@ -141,35 +170,9 @@ function HomePage() {
 
   useEffect(() => {
     if (!user || accessDenied || roleLoading) return;
-    if (localAuthBypass) {
-      navigate('/recorder', { replace: true });
-      return;
-    }
-    const normalizeEmail = (value: string) => {
-      const trimmed = value.trim().toLowerCase();
-      const [local, domain] = trimmed.split('@');
-      if (!local || !domain) return trimmed;
-      const normalizedDomain = domain === 'googlemail.com' ? 'gmail.com' : domain;
-      const localPart = normalizedDomain === 'gmail.com'
-        ? local.split('+')[0].replace(/\./g, '')
-        : local.split('+')[0];
-      return `${localPart}@${normalizedDomain}`;
-    };
-    const superadminEmails = (String(import.meta.env.VITE_SUPERADMIN_EMAIL ?? ''))
-      .split(/[,;]+/)
-      .map((value: string) => normalizeEmail(value))
-      .filter(Boolean);
-    const currentEmail = user?.email ? normalizeEmail(user.email) : null;
-    const isSuperadminEmail = Boolean(currentEmail && superadminEmails.includes(currentEmail));
-    const targetPath = role
-      ? role === 'teacher'
-        ? '/teacher/missions'
-        : '/student/attempts'
-      : isSuperadminEmail
-      ? '/teacher/missions'
-      : '/student/attempts';
+    const targetPath = isSuperadmin ? '/admin/access' : role === 'teacher' ? '/teacher/missions' : '/student/attempts';
     navigate(targetPath, { replace: true });
-  }, [user, role, roleLoading, accessDenied, navigate]);
+  }, [user, role, roleLoading, accessDenied, isSuperadmin, navigate]);
 
   return (
     <Stack

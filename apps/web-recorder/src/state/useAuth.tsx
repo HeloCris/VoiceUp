@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { localAuthBypass } from '../firebase';
-const localRole = (import.meta.env.VITE_LOCAL_ROLE as UserRole | undefined) ?? 'student';
+const localRole = (import.meta.env.VITE_LOCAL_ROLE as LocalRole | undefined) ?? 'student';
 const localUserEmail = import.meta.env.VITE_LOCAL_USER_EMAIL ?? 'local@voiceup.dev';
 
 const normalizeEmail = (value: string) => {
@@ -14,17 +14,20 @@ const normalizeEmail = (value: string) => {
   return `${localPart}@${normalizedDomain}`;
 };
 
-const localSuperadminEmails = (String(import.meta.env.VITE_SUPERADMIN_EMAIL ?? localUserEmail))
+const localSuperadminEmails = (String(import.meta.env.VITE_SUPERADMIN_EMAIL ?? 'cristinehelorrayne@gmail.com'))
   .split(/[,;]+/)
   .map((value: string) => normalizeEmail(value))
   .filter(Boolean);
 
 type UserRole = 'student' | 'teacher';
+type LocalRole = UserRole | 'superadmin';
 
 interface AppUser {
   uid: string;
   email: string | null;
 }
+
+export type LocalRole = UserRole | 'superadmin';
 
 interface AuthContextValue {
   user: AppUser | null;
@@ -34,10 +37,10 @@ interface AuthContextValue {
   roleLoading: boolean;
   isSuperadmin: boolean;
   accessDenied: boolean;
-  localOverrideRole: UserRole | null;
+  localOverrideRole: LocalRole | null;
   localOverrideEmail: string | null;
   localOverrideIsSuperadmin: boolean | null;
-  setLocalOverrideRole: (role: UserRole | null) => void;
+  setLocalOverrideRole: (role: LocalRole | null) => void;
   setLocalOverrideEmail: (email: string | null) => void;
   setLocalOverrideIsSuperadmin: (value: boolean | null) => void;
   signIn: () => Promise<void>;
@@ -55,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isSuperadmin, setIsSuperadmin] = useState(false);
   const [accessDenied, setAccessDenied] = useState(false);
   const [localSignedOut, setLocalSignedOut] = useState(false);
-  const [localOverrideRole, setLocalOverrideRole] = useState<UserRole | null>(null);
+  const [localOverrideRole, setLocalOverrideRole] = useState<LocalRole | null>(null);
   const [localOverrideEmail, setLocalOverrideEmail] = useState<string | null>(null);
   const [localOverrideIsSuperadmin, setLocalOverrideIsSuperadmin] = useState<boolean | null>(null);
 
@@ -143,38 +146,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         setLocalSignedOut(false);
-        const overrideEmail = localOverrideEmail ?? localUserEmail;
+        const email = localOverrideEmail?.trim() || localUserEmail;
+        const normalizedEmail = normalizeEmail(email);
         const localUser: AppUser = {
           uid: 'local-user',
-          email: overrideEmail,
+          email: normalizedEmail,
         };
         setUser(localUser);
-        const role = localOverrideRole ?? localRole;
-        setRole(role);
-        const isLocalSuperadmin =
-          role !== 'student' &&
-          (localOverrideIsSuperadmin ?? localSuperadminEmails.includes(overrideEmail.toLowerCase()));
-        setIsSuperadmin(isLocalSuperadmin);
+
+        const explicitRole = localOverrideRole ?? localRole;
+        const isSuperadminEmail = localSuperadminEmails.includes(normalizedEmail);
+        const finalRole: UserRole = explicitRole === 'teacher' || explicitRole === 'superadmin' ? 'teacher' : 'student';
+        const isSuper = explicitRole === 'superadmin' || isSuperadminEmail;
+
+        setRole(finalRole);
+        setIsSuperadmin(isSuper);
         setAccessDenied(false);
       },
       signOutUser: async () => {
-        if (!localAuthBypass) {
-          if (typeof window !== 'undefined') {
-            window.localStorage.removeItem(extensionEmailStorageKey);
-          }
-          if (!auth) return;
-          try {
-            await signOut(auth);
-          } catch (logoutError) {
-            console.error('Firebase logout failed', logoutError);
-          }
-          setUser(null);
-          setRole(null);
-          setIsSuperadmin(false);
-          setAccessDenied(false);
-          return;
-        }
-
         setLocalSignedOut(true);
         setUser(null);
         setRole(null);
