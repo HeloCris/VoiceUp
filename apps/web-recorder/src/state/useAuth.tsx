@@ -417,7 +417,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             if (
               code === 'auth/popup-blocked' ||
               code === 'auth/popup-closed-by-user' ||
-              code === 'auth/operation-not-supported-in-this-environment'
+              code === 'auth/operation-not-supported-in-this-environment' ||
+              code === 'auth/internal-error'
             ) {
               try {
                 await signInWithRedirect(auth, googleProvider);
