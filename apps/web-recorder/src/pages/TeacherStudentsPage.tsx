@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { getAuthHeaders } from '../firebase';
+import { API_URL, getAuthHeaders } from '../firebase';
 
 type TeacherClass = {
   classId: string;
@@ -36,7 +36,7 @@ export default function TeacherStudentsPage() {
           setError('Faca login para carregar turmas.');
           return;
         }
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/teacher/classes`, {
+        const response = await fetch(`${API_URL}/v1/teacher/classes`, {
           headers,
         });
         if (!response.ok) {
@@ -64,7 +64,7 @@ export default function TeacherStudentsPage() {
         setError('Faca login para cadastrar alunos.');
         return;
       }
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/teacher/students`, {
+      const response = await fetch(`${API_URL}/v1/teacher/students`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

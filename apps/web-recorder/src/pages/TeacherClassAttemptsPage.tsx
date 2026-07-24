@@ -17,7 +17,7 @@ import MicRounded from '@mui/icons-material/MicRounded';
 import StarRounded from '@mui/icons-material/StarRounded';
 import EmojiEventsRounded from '@mui/icons-material/EmojiEventsRounded';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getAuthHeaders } from '../firebase';
+import { API_URL, getAuthHeaders } from '../firebase';
 
 interface AttemptItem {
   attemptId: string;
@@ -147,7 +147,7 @@ export default function TeacherClassAttemptsPage() {
       try {
         const headers = await getAuthHeaders();
         if (!headers.Authorization) return;
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/teacher/classes`, {
+        const response = await fetch(`${API_URL}/v1/teacher/classes`, {
           headers,
         });
         if (!response.ok) return;
@@ -170,7 +170,7 @@ export default function TeacherClassAttemptsPage() {
         }
         const query = selectedMissionId ? `?missionId=${encodeURIComponent(selectedMissionId)}` : '';
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/v1/teacher/classes/${classId}/attempts${query}`,
+          `${API_URL}/v1/teacher/classes/${classId}/attempts${query}`,
           { headers }
         );
         if (!response.ok) {
@@ -196,7 +196,7 @@ export default function TeacherClassAttemptsPage() {
           return;
         }
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/v1/teacher/classes/${classId}/students`,
+          `${API_URL}/v1/teacher/classes/${classId}/students`,
           { headers }
         );
         if (!response.ok) {
@@ -223,7 +223,7 @@ export default function TeacherClassAttemptsPage() {
         }
         const query = selectedMissionId ? `?missionId=${encodeURIComponent(selectedMissionId)}` : '';
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/v1/teacher/classes/${classId}/progress${query}`,
+          `${API_URL}/v1/teacher/classes/${classId}/progress${query}`,
           { headers }
         );
         if (!response.ok) {
@@ -249,7 +249,7 @@ export default function TeacherClassAttemptsPage() {
           return;
         }
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/v1/teacher/classes/${classId}/missions`,
+          `${API_URL}/v1/teacher/classes/${classId}/missions`,
           { headers }
         );
         if (!response.ok) {
@@ -297,7 +297,7 @@ export default function TeacherClassAttemptsPage() {
         return;
       }
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/v1/teacher/attempts/${attemptId}/feedback`,
+        `${API_URL}/v1/teacher/attempts/${attemptId}/feedback`,
         {
           method: 'POST',
           headers: {
@@ -329,7 +329,7 @@ export default function TeacherClassAttemptsPage() {
         setStudentError('Faca login para cadastrar alunos.');
         return;
       }
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/teacher/students`, {
+      const response = await fetch(`${API_URL}/v1/teacher/students`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -344,7 +344,7 @@ export default function TeacherClassAttemptsPage() {
       setStudentName('');
       setStudentEmail('');
       const listResponse = await fetch(
-        `${import.meta.env.VITE_API_URL}/v1/teacher/classes/${classId}/students`,
+        `${API_URL}/v1/teacher/classes/${classId}/students`,
         { headers }
       );
       if (listResponse.ok) {
@@ -372,7 +372,7 @@ export default function TeacherClassAttemptsPage() {
         setMissionError('Faca login para criar missoes.');
         return;
       }
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/missions`, {
+      const response = await fetch(`${API_URL}/v1/missions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -393,7 +393,7 @@ export default function TeacherClassAttemptsPage() {
       setMissionDescription('');
       setMissionPrompts('');
       const listResponse = await fetch(
-        `${import.meta.env.VITE_API_URL}/v1/teacher/classes/${classId}/missions`,
+        `${API_URL}/v1/teacher/classes/${classId}/missions`,
         { headers }
       );
       if (listResponse.ok) {

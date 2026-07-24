@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { RecorderStatus } from '../components/RecorderControls';
-import { getAuthHeaders } from '../firebase';
+import { API_URL, getAuthHeaders } from '../firebase';
 
 interface RecorderAPI {
   isSupported: boolean;
@@ -48,8 +48,6 @@ export type UploadResult = {
 };
 
 const MAX_DURATION_SECONDS = 120;
-
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080';
 
 export default function useRecorder(): RecorderAPI {
   const isSupported = typeof MediaRecorder !== 'undefined';

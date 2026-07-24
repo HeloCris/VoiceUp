@@ -75,7 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const overrideEmail = localOverrideEmail ?? localUserEmail;
       const localUser: AppUser = {
         uid: 'local-user',
-        email: overrideEmail,
+        email: normalizeEmail(overrideEmail),
       };
       setUser(localUser);
       setLoading(false);

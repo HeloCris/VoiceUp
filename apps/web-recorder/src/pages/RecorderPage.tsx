@@ -19,7 +19,7 @@ import RecorderControls from '../components/RecorderControls';
 import useRecorder, { UploadResult } from '../state/useRecorder';
 import { badges, chapters, missions } from '../data/linguatown';
 import { useLocation } from 'react-router-dom';
-import { getAuthHeaders } from '../firebase';
+import { API_URL, getAuthHeaders } from '../firebase';
 import { useAuth } from '../state/useAuth';
 
 type FeedbackSnapshot = {
@@ -245,7 +245,7 @@ export default function RecorderPage() {
         setUploadError('Faca login para confirmar o envio.');
         return;
       }
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/attempts/${lastAttemptId}/confirm`, {
+      const response = await fetch(`${API_URL}/v1/attempts/${lastAttemptId}/confirm`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -296,10 +296,10 @@ export default function RecorderPage() {
           return;
         }
         const [missionsResponse, classesResponse] = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_URL}/v1/student/missions`, {
+          fetch(`${API_URL}/v1/student/missions`, {
             headers,
           }),
-          fetch(`${import.meta.env.VITE_API_URL}/v1/student/classes`, {
+          fetch(`${API_URL}/v1/student/classes`, {
             headers,
           }),
         ]);

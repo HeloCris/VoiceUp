@@ -19,7 +19,7 @@ import MicRounded from '@mui/icons-material/MicRounded';
 import StarRounded from '@mui/icons-material/StarRounded';
 import EmojiEventsRounded from '@mui/icons-material/EmojiEventsRounded';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getAuthHeaders } from '../firebase';
+import { API_URL, getAuthHeaders } from '../firebase';
 
 type TeacherClass = {
   classId: string;
@@ -69,7 +69,7 @@ export default function TeacherClassesPage() {
         setError('Faca login para ver suas turmas.');
         return;
       }
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/teacher/classes`, {
+      const response = await fetch(`${API_URL}/v1/teacher/classes`, {
         headers,
       });
       if (!response.ok) {
@@ -104,7 +104,7 @@ export default function TeacherClassesPage() {
         setError('Faca login para criar turmas.');
         return;
       }
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/teacher/classes`, {
+      const response = await fetch(`${API_URL}/v1/teacher/classes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

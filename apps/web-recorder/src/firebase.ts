@@ -28,8 +28,8 @@ const isFirebaseConfigValid = Boolean(
     firebaseConfig.messagingSenderId
 );
 
-export const localAuthBypass = true;
-export const firebaseConfigValid = false;
+export const localAuthBypass = localAuthBypassEnv;
+export const firebaseConfigValid = isFirebaseConfigValid;
 const extensionEmailStorageKey = 'voiceup_extension_google_email';
 
 const app = null;
@@ -79,3 +79,11 @@ export async function getAuthHeaders(): Promise<Record<string, string>> {
   }
   return headers;
 }
+
+export function hasAuthHeaders(headers: Record<string, string>): boolean {
+  return Boolean(headers.Authorization || headers['X-Local-User-Email']);
+}
+
+export const API_URL = localAuthBypass
+  ? import.meta.env.VITE_LOCAL_API_URL ?? 'http://localhost:8080'
+  : import.meta.env.VITE_API_URL ?? 'http://localhost:8080';

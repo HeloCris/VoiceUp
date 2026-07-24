@@ -16,7 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { getAuthHeaders } from '../firebase';
+import { API_URL, getAuthHeaders } from '../firebase';
 import { useAuth } from '../state/useAuth';
 
 type AccessUser = {
@@ -100,7 +100,7 @@ export default function AdminAccessPage() {
         setError('Faca login para ver os acessos.');
         return;
       }
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/admin/users`, {
+      const response = await fetch(`${API_URL}/v1/admin/users`, {
         headers,
       });
       if (!response.ok) {
@@ -143,8 +143,8 @@ export default function AdminAccessPage() {
       }
       const method = editingEmail ? 'PATCH' : 'POST';
       const url = editingEmail
-        ? `${import.meta.env.VITE_API_URL}/v1/admin/users/${encodeURIComponent(editingEmail)}`
-        : `${import.meta.env.VITE_API_URL}/v1/admin/users`;
+        ? `${API_URL}/v1/admin/users/${encodeURIComponent(editingEmail)}`
+        : `${API_URL}/v1/admin/users`;
       const response = await fetch(url, {
         method,
         headers: {
@@ -341,7 +341,7 @@ export default function AdminAccessPage() {
                                 return;
                               }
                               const response = await fetch(
-                                `${import.meta.env.VITE_API_URL}/v1/admin/users/${encodeURIComponent(user.email)}`,
+                                `${API_URL}/v1/admin/users/${encodeURIComponent(user.email)}`,
                                 {
                                   method: 'DELETE',
                                   headers,

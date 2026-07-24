@@ -21,7 +21,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-import { getAuthHeaders } from '../firebase';
+import { API_URL, getAuthHeaders } from '../firebase';
 
 type MissionItem = {
   missionId: string;
@@ -65,7 +65,7 @@ export default function TeacherMissionsPage() {
       setLoading(true);
       setError(null);
       const headers = await getAuthHeaders();
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/missions/${missionId}`, {
+      const response = await fetch(`${API_URL}/v1/missions/${missionId}`, {
         method: 'DELETE',
         headers,
       });
@@ -101,7 +101,7 @@ export default function TeacherMissionsPage() {
       setError(null);
       const headers = await getAuthHeaders();
       const prompts = editPromptsText.split('\n').map((line) => line.trim()).filter(Boolean);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/missions/${editMission.missionId}`, {
+      const response = await fetch(`${API_URL}/v1/missions/${editMission.missionId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -163,7 +163,7 @@ export default function TeacherMissionsPage() {
         setError('Faca login para ver as missoes.');
         return;
       }
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/missions`, {
+      const response = await fetch(`${API_URL}/v1/missions`, {
         headers,
       });
       if (!response.ok) {
@@ -195,7 +195,7 @@ export default function TeacherMissionsPage() {
       try {
         const headers = await getAuthHeaders();
         if (!headers.Authorization) return;
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/teacher/classes`, {
+        const response = await fetch(`${API_URL}/v1/teacher/classes`, {
           headers,
         });
         if (!response.ok) return;
@@ -226,7 +226,7 @@ export default function TeacherMissionsPage() {
         return;
       }
       const prompts = promptList;
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/missions`, {
+      const response = await fetch(`${API_URL}/v1/missions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -165,7 +165,7 @@ function Layout() {
 }
 
 function HomePage() {
-  const { user, role, roleLoading, accessDenied } = useAuth();
+  const { user, role, roleLoading, accessDenied, isSuperadmin } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {

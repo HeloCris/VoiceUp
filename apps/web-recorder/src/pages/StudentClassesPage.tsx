@@ -16,7 +16,7 @@ import StarRounded from '@mui/icons-material/StarRounded';
 import EmojiEventsRounded from '@mui/icons-material/EmojiEventsRounded';
 import BusinessRounded from '@mui/icons-material/BusinessRounded';
 import { useNavigate } from 'react-router-dom';
-import { getAuthHeaders } from '../firebase';
+import { API_URL, getAuthHeaders } from '../firebase';
 
 type StudentClass = {
   classId?: string;
@@ -56,7 +56,7 @@ export default function StudentClassesPage() {
           setError('Faca login para ver suas turmas.');
           return;
         }
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/v1/student/classes`, {
+        const response = await fetch(`${API_URL}/v1/student/classes`, {
           headers,
         });
         if (!response.ok) {

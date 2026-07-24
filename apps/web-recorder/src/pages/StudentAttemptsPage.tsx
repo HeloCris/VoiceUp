@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { getAuthHeaders } from '../firebase';
+import { API_URL, getAuthHeaders } from '../firebase';
 
 interface AttemptItem {
   attemptId: string;
@@ -97,13 +97,13 @@ export default function StudentAttemptsPage() {
           return;
         }
         const [attemptsResponse, missionsResponse, classesResponse] = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_URL}/v1/student/attempts`, {
+          fetch(`${API_URL}/v1/student/attempts`, {
             headers,
           }),
-          fetch(`${import.meta.env.VITE_API_URL}/v1/student/missions`, {
+          fetch(`${API_URL}/v1/student/missions`, {
             headers,
           }),
-          fetch(`${import.meta.env.VITE_API_URL}/v1/student/classes`, {
+          fetch(`${API_URL}/v1/student/classes`, {
             headers,
           }),
         ]);
